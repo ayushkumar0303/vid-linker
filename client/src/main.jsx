@@ -11,6 +11,7 @@ import AuthPage from "./pages/AuthPage.jsx";
 import ClientSignin from "./pages/ClientSignin.jsx";
 import FreelancerSignin from "./pages/FreelancerSignin.jsx";
 import FreelancerSignup from "./pages/FreelancerSignup.jsx";
+import FreelancerAuth from "./pages/FreelancerAuth.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -23,8 +24,10 @@ createRoot(document.getElementById("root")).render(
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/auth" element={<AuthPage />}>
             <Route index element={<ClientSignin />} />
-            <Route path="freelancer-signin" element={<FreelancerSignin />} />
-            <Route path="freelancer-signup" element={<FreelancerSignup />} />
+            <Route path="freelancer" element={<FreelancerAuth />}>
+              <Route index element={<FreelancerSignin />} />
+              <Route path="signup" element={<FreelancerSignup />} />
+            </Route>
           </Route>
         </Route>
       </Routes>

@@ -1,12 +1,16 @@
 import express from "express";
 import mongoose from "mongoose";
 import userRouter from "./routes/user.routes.js";
+import authRouter from "./routes/auth.routes.js";
+import dotenv from "dotenv";
 const app = express();
 
+app.use(express.json());
+dotenv.config();
+// app.use();
+
 mongoose
-  .connect(
-    "mongodb+srv://ayush8295:ayush@vid-linker.s2mfe.mongodb.net/?retryWrites=true&w=majority&appName=vid-linker"
-  )
+  .connect(process.env.MONGO)
   .then(() => {
     console.log("Connected to MongoDB");
   })
@@ -18,4 +22,5 @@ app.listen(3000, (req, res) => {
   console.log("server is running on port number 3000");
 });
 
-app.use("/", userRouter);
+app.use("/server/user", userRouter);
+app.use("/server/auth", authRouter);
