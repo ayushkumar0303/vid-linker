@@ -88,4 +88,63 @@ export const signin = async (req, res, next) => {
   // console.log(user);
 };
 
+export const googleClient = async (req, res, next) => {
+  const { name, email, profilePicture } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      const token = jwt.sign(
+        { id: user._id, role: user.role, isAdmin: user.isAdmin },
+        process.env.JWT_SECRET
+      );
+      const { password: __pass, ...rest } = user._doc;
+      res
+        .status(200)
+        .cookie("access_token", token, { httpOnly: true })
+        .json(rest);
+    } else {
+      const username =
+        name.toLowerCase().split(" ").join("") +
+        Math.random().toString(9).slice(-4);
+      const password = Math.random().toString(36).slice(-8);
+      // console.log(password);
+      // console.log(username);
+
+      const hashPassword = bcryptjs.hashSync(password, 10);
+      try {
+        const newUser = await User({
+          name,
+          username,
+          email,
+          profilePicture,
+          password: hashPassword,
+          role: "client",
+        });
+
+        await newUser.save();
+
+        const token = jwt.sign(
+          {
+            id: newUser._id,
+            isAdmin: newUser.isAdmin,
+            role: newUser.role,
+          },
+          process.env.JWT_SECRET
+        );
+
+        const { password: __pass, ...rest } = newUser._doc;
+
+        res
+          .status(200)
+          .cookie("access_token", token, { httpOnly: true })
+          .json(rest);
+      } catch (error) {
+        next(error);
+      }
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 export default signUp;
