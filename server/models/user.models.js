@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema(
     profilePicture: {
       type: String,
       default:
-        "https://th.bing.com/th/id/OIP.mMz3b-Tnh_-Qwg3atrTl_AHaGO?rs=1&pid=ImgDetMain",
+        "https://th.bing.com/th/id/OIP.F5__MKT22Z4iwy-s2YJFHgAAAA?rs=1&pid=ImgDetMain",
     },
   },
   { timestamps: true }

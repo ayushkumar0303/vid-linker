@@ -1,6 +1,6 @@
 import { Button, TextInput } from "flowbite-react";
 import React, { useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 function FreelancerSignup() {
   const [formdata, setFormData] = useState({});
@@ -63,6 +63,12 @@ function FreelancerSignup() {
           }
         ></TextInput>
         <Button type="submit">Sign Up</Button>
+        <div className="text-sm">
+          <span>Already a member?</span>
+          <Link to="/auth/freelancer" className="text-blue-500 pl-3">
+            Sign In
+          </Link>
+        </div>
       </form>
     </div>
   );

@@ -1,9 +1,27 @@
-import React from "react";
-import { Avatar, Dropdown, Navbar } from "flowbite-react";
+import React, { useEffect, useState } from "react";
+import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
 import { Link } from "react-router";
 import { SiLinkfire } from "react-icons/si";
+import { useSelector } from "react-redux";
 
 function Header() {
+  const { currentUser } = useSelector((state) => state.user);
+  // console.log(currentUser);
+  // const [user, setUser] = useState({});
+  // useEffect(() => {
+  //   const getUser = async () => {
+  //     try {
+  //       const res = await fetch("/server/user/get-users");
+  //       const data = await res.json();
+  //       if (res.ok) {
+  //         setUser(data.users[0]);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   getUser();
+  // }, [currentUser]);
   return (
     <Navbar fluid rounded className="border border-b-gray-700">
       <Navbar.Brand>
@@ -18,30 +36,55 @@ function Header() {
         </div>
       </Navbar.Brand>
       <div className="flex md:order-2">
-        <Dropdown
-          arrowIcon={false}
-          inline
-          label={
-            <Avatar
-              alt="User settings"
-              img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-              rounded
-            />
-          }
-        >
-          <Dropdown.Header>
-            <span className="block text-sm">Bonnie Green</span>
-            <span className="block truncate text-sm font-medium">
-              name@flowbite.com
-            </span>
-          </Dropdown.Header>
-          <Dropdown.Item>Dashboard</Dropdown.Item>
-          <Dropdown.Item>Settings</Dropdown.Item>
-          <Dropdown.Item>Earnings</Dropdown.Item>
-          <Dropdown.Divider />
-          <Dropdown.Item>Sign out</Dropdown.Item>
-        </Dropdown>
-        <Navbar.Toggle />
+        {currentUser && currentUser._id ? (
+          <>
+            <Dropdown
+              // arrowIcon={false}
+              inline
+              label={
+                <Avatar
+                  alt="User settings"
+                  img={currentUser.profilePicture}
+                  rounded
+                >
+                  <div className="space-y-1 font-medium dark:text-white">
+                    <div>{currentUser.name}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                      {`Joined in ${new Date(
+                        currentUser.createdAt
+                      ).toLocaleString("en-us", {
+                        month: "long",
+                      })}
+                      ${new Date(currentUser.createdAt).getFullYear()}`}
+                    </div>
+                  </div>
+                </Avatar>
+              }
+            >
+              <Dropdown.Header>
+                <span className="block text-sm">@{currentUser.username}</span>
+                <span className="block truncate text-sm font-medium">
+                  {currentUser.email}
+                </span>
+              </Dropdown.Header>
+              <Link to="/dashboard">
+                <Dropdown.Item>Dashboard</Dropdown.Item>
+              </Link>
+              <Link to="/dashboard?tab=profile">
+                <Dropdown.Item>Profile</Dropdown.Item>
+              </Link>
+              <Dropdown.Divider />
+              <Dropdown.Item>Sign out</Dropdown.Item>
+            </Dropdown>
+            <Navbar.Toggle />
+          </>
+        ) : (
+          <Link to="/auth">
+            <Button color="success" outline>
+              Sign In
+            </Button>
+          </Link>
+        )}
       </div>
       <Navbar.Collapse>
         <Navbar.Link as={"div"}>

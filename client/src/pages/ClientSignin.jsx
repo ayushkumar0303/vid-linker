@@ -3,9 +3,12 @@ import React from "react";
 import { app } from "../firebase";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router";
+import { signInFailure, signInStart, signInSuccess } from "../store/store";
+import { useDispatch } from "react-redux";
 
 function ClientSignin() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     const auth = getAuth(app);
@@ -14,6 +17,7 @@ function ClientSignin() {
     try {
       const result = await signInWithPopup(auth, provider);
       console.log(result);
+      dispatch(signInStart());
       const res = await fetch("/server/auth/google-client", {
         method: "POST",
         headers: {
@@ -29,6 +33,9 @@ function ClientSignin() {
       const data = await res.json();
       if (res.ok) {
         navigate("/");
+        dispatch(signInSuccess(data));
+      } else {
+        dispatch(signInFailure(data));
       }
     } catch (error) {
       console.log(error);

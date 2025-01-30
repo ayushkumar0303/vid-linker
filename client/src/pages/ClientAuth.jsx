@@ -1,10 +1,10 @@
-import { Button } from "flowbite-react";
 import React from "react";
-import { Link, Outlet } from "react-router";
+import { Outlet } from "react-router";
 
-function FreelancerAuth() {
+function ClientAuth() {
   return (
     <div>
+      {" "}
       <div className="flex gap-2">
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis
@@ -13,10 +13,9 @@ function FreelancerAuth() {
           voluptates tempora facilis!
         </p>
       </div>
-
       <Outlet />
     </div>
   );
 }
 
-export default FreelancerAuth;
+export default ClientAuth;

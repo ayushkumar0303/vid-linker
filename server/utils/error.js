@@ -5,4 +5,5 @@ const errorHander = (statusCode, message) => {
   error.message = message;
   return error;
 };
+
 export default errorHander;
