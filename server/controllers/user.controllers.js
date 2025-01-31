@@ -6,7 +6,28 @@ const testUser = (req, res) => {
   console.log("testing is successful");
   res.json("testing is successful");
 };
-export const getUsers = async (req, res, next) => {};
+export const getUser = async (req, res, next) => {
+  // console.log(req.user.id);
+  // console.log(req.params.userId);
+  if (req.user.id !== req.params.userId) {
+    return next(errorHander(401, "You are not allowed to get this user"));
+  }
+
+  try {
+    const user = await User.findById(req.user.id);
+    // console.log(user);
+
+    if (!user) {
+      return next(errorHander(404, "User not found"));
+    }
+
+    const { password: _pass, ...rest } = user._doc;
+
+    return res.status(200).json(rest);
+  } catch (error) {
+    return next(error);
+  }
+};
 export const updateUser = async (req, res, next) => {
   let { username, email, password } = req.body;
   // console.log(req.params.userId);
@@ -56,6 +77,31 @@ export const updateUser = async (req, res, next) => {
     );
 
     const { password: _pass, ...rest } = updatedUser._doc;
+    return res.status(200).json(rest);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const deleteYoutubeAuthToken = async (req, res, next) => {
+  // console.log("ddjjddj");
+  if (req.user.id !== req.params.userId) {
+    return next(
+      errorHander(401, "You are not allowed to delete the youtube auth token")
+    );
+  }
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        $unset: {
+          youtubeAuthToken: "",
+        },
+      },
+      { new: true }
+    );
+    const { password: _pass, ...rest } = user._doc;
     return res.status(200).json(rest);
   } catch (error) {
     return next(error);

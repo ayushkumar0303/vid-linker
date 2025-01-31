@@ -14,7 +14,6 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
-
       unique: true,
     },
     password: { type: String, required: true },
@@ -30,6 +29,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       default:
         "https://th.bing.com/th/id/OIP.F5__MKT22Z4iwy-s2YJFHgAAAA?rs=1&pid=ImgDetMain",
+    },
+    youtubeAuthToken: {
+      type: Object,
     },
   },
   { timestamps: true }

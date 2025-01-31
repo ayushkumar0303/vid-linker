@@ -57,6 +57,19 @@ export const userSlice = createSlice({
       state.loading = false;
       state.currentUser = null;
     },
+    fetchUserStart: (state) => {
+      state.error = null;
+      state.loading = true;
+    },
+    fetchUserError: (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    },
+    fetchUserSuccess: (state, action) => {
+      state.error = null;
+      state.loading = false;
+      state.currentUser = action.payload;
+    },
   },
 });
 
@@ -71,6 +84,9 @@ export const {
   deleteStart,
   deleteSuccess,
   signOutSuccess,
+  fetchUserError,
+  fetchUserSuccess,
+  fetchUserStart,
 } = userSlice.actions;
 
 const rootReducer = combineReducers({

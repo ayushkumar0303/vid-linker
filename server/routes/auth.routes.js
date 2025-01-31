@@ -8,6 +8,6 @@ const authRouter = express.Router();
 
 authRouter.post("/signup", signUp);
 authRouter.post("/signin", signin);
-authRouter.post("/google-client", googleClient);
+authRouter.post("/google-client-auth", googleClient);
 
 export default authRouter;

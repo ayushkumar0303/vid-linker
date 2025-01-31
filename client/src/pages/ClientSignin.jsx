@@ -18,7 +18,7 @@ function ClientSignin() {
       const result = await signInWithPopup(auth, provider);
       console.log(result);
       dispatch(signInStart());
-      const res = await fetch("/server/auth/google-client", {
+      const res = await fetch("/server/auth/google-client-auth", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
