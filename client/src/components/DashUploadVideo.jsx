@@ -1,55 +1,92 @@
 import { Button, FileInput, Label, TextInput } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { storage } from "../appwrite";
+import { ID } from "appwrite";
 
 function DashUploadVideo() {
   const { currentUser } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({});
   const [video, setVideo] = useState(null);
-  const [videoUrl, setVideoUrl] = useState(null);
-  console.log(formData);
+  const [videoUploadLoading, setVideoUploadLoading] = useState(false);
+  // console.log(formData);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-
+    // console.log(file);
     if (file) {
       setVideo(file);
-      setVideoUrl(URL.createObjectURL(file));
     }
   };
 
-  const uploadFile = async () => {};
+  const uploadFile = async () => {
+    try {
+      setVideoUploadLoading(true);
+      const res = await storage.createFile(
+        "679e19a3001ccb5a563f",
+        ID.unique(),
+        video
+      );
+
+      if (res?.$id) {
+        const result = storage.getFileView("679e19a3001ccb5a563f", res.$id);
+        setFormData({ ...formData, videoUrl: result.href });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setVideoUploadLoading(false);
+  };
+
   useEffect(() => {
-    uploadFile();
+    if (video) {
+      uploadFile();
+    }
   }, [video]);
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
     try {
       const res = await fetch(`/server/video/upload-video/${currentUser._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formdata),
+        body: JSON.stringify(formData),
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <Label>
-          Client Id
+          Client User Id
           <TextInput
             type="text"
-            placeholder="Client Id"
+            required={true}
+            placeholder="Client User Id"
             onChange={(e) =>
               setFormData({ ...formData, clientId: e.target.value })
+            }
+          />
+        </Label>
+        <Label>
+          Your User Id (freelancer userId )
+          <TextInput
+            type="text"
+            required={true}
+            placeholder="Freelancer User Id"
+            onChange={(e) =>
+              setFormData({ ...formData, freelancerId: e.target.value })
             }
           />
         </Label>
         <div className="flex w-full items-center justify-center">
           <Label
             htmlFor="dropzone-file"
-            className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+            className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 required:true"
           >
             <div className="flex flex-col items-center justify-center pb-6 pt-5">
               <svg
@@ -75,14 +112,16 @@ function DashUploadVideo() {
                 SVG, PNG, JPG or GIF (MAX. 800x400px)
               </p>
             </div>
-            <FileInput
+            <input
+              type="file"
+              accept="video/*"
+              required
               onChange={handleFileChange}
               id="dropzone-file"
-              // className="hidden"
             />
           </Label>
         </div>
-        <Button type="submit" outline>
+        <Button type="submit" outline disabled={videoUploadLoading}>
           Upload video
         </Button>
       </form>

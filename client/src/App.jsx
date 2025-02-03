@@ -10,25 +10,25 @@ import {
 } from "./store/store";
 
 function App() {
-  const { currentUser } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        dispatch(fetchUserStart());
-        const res = await fetch(`/server/user/get-user/${currentUser?._id}`);
-        const data = await res.json();
-        if (res.ok) {
-          dispatch(fetchUserSuccess(data));
-        } else {
-          dispatch(fetchUserError(data));
-        }
-      } catch (error) {
-        dispatch(fetchUserError(error));
-      }
-    };
-    fetchData();
-  }, [currentUser?._id]);
+  // const { currentUser } = useSelector((state) => state.user);
+  // const dispatch = useDispatch();
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       dispatch(fetchUserStart());
+  //       const res = await fetch(`/server/user/get-user/${currentUser?._id}`);
+  //       const data = await res.json();
+  //       if (res.ok) {
+  //         dispatch(fetchUserSuccess(data));
+  //       } else {
+  //         dispatch(fetchUserError(data));
+  //       }
+  //     } catch (error) {
+  //       dispatch(fetchUserError(error));
+  //     }
+  //   };
+  //   fetchData();
+  // }, [currentUser?._id]);
   return (
     <>
       <Header />

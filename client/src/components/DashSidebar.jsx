@@ -88,16 +88,6 @@ function DashSidebar() {
                   Freelancers
                 </Sidebar.Item>
               </Link>
-              <Link to="/dashboard?tab=add-accounts">
-                <Sidebar.Item
-                  href="#"
-                  icon={BsYoutube}
-                  as={"div"}
-                  active={tab === "add-accounts"}
-                >
-                  Connect account
-                </Sidebar.Item>
-              </Link>
               <Link to="/dashboard?tab=review-videos">
                 <Sidebar.Item
                   href="#"

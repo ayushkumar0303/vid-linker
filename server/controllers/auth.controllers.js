@@ -72,6 +72,7 @@ export const signin = async (req, res, next) => {
         id: validUser._id,
         role: validUser.role,
         isAdmin: validUser.isAdmin,
+        username: validUser.username,
       },
       process.env.JWT_SECRET
     );
@@ -95,7 +96,12 @@ export const googleClient = async (req, res, next) => {
     const user = await User.findOne({ email });
     if (user) {
       const token = jwt.sign(
-        { id: user._id, role: user.role, isAdmin: user.isAdmin },
+        {
+          id: user._id,
+          role: user.role,
+          isAdmin: user.isAdmin,
+          username: user.username,
+        },
         process.env.JWT_SECRET
       );
       const { password: __pass, ...rest } = user._doc;
@@ -129,6 +135,7 @@ export const googleClient = async (req, res, next) => {
             id: newUser._id,
             isAdmin: newUser.isAdmin,
             role: newUser.role,
+            username: newUser.username,
           },
           process.env.JWT_SECRET
         );

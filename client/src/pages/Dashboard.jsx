@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import DashSidebar from "../components/DashSidebar";
-import { useLocation } from "react-router";
+import { Outlet, useLocation } from "react-router";
 import DashProfile from "../components/DashProfile";
 import DashUploadVideo from "../components/DashUploadVideo";
-import DashConnectAccount from "../components/DashConnectAccount";
+import DashReviewVideos from "../components/DashReviewVideos";
+import { useSelector } from "react-redux";
 
 function Dashboard() {
+  const { currentUser } = useSelector((state) => state.user);
   const path = useLocation();
   const [tab, setTab] = useState("");
   useEffect(() => {
@@ -20,9 +22,15 @@ function Dashboard() {
       </div>
       <div>
         {tab === "profile" && <DashProfile />}
-        {tab === "video-upload" && <DashUploadVideo />}
-        {tab === "add-accounts" && <DashConnectAccount />}
+        {currentUser?.role === "freelancer" && (
+          <>{tab === "video-upload" && <DashUploadVideo />}</>
+        )}
+
+        {currentUser?.role === "client" && (
+          <>{tab === "review-videos" && <DashReviewVideos />}</>
+        )}
       </div>
+      <Outlet />
     </div>
   );
 }

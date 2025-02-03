@@ -18,6 +18,9 @@ import ClientAuth from "./pages/ClientAuth.jsx";
 import Error404 from "./pages/Error404.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import PrivateDash from "./components/PrivateDash.jsx";
+import VideoApprove from "./components/VideoApprove.jsx";
+import VideoReject from "./components/VideoReject.jsx";
+import UploadVideo from "./components/UploadVideo.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -30,7 +33,10 @@ createRoot(document.getElementById("root")).render(
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/dashboard" element={<PrivateDash />}>
-              <Route index element={<Dashboard />} />
+              {/* <Route index element={<Dashboard />} /> */}
+              <Route path="approve/:videoId" element={<VideoApprove />} />
+              <Route path="reject/:videoId" element={<VideoReject />} />
+              <Route path="upload/:videoId" element={<UploadVideo />} />
             </Route>
 
             <Route path="/auth" element={<AuthPage />} />
