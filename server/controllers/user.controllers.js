@@ -3,8 +3,8 @@ import errorHander from "../utils/error.js";
 import bcryptjs from "bcryptjs";
 
 const testUser = (req, res) => {
-  console.log("testing is successful");
-  res.json("testing is successful");
+  // console.log("testing is successful");
+  res.json({ message: "testing is successful" });
 };
 export const getUser = async (req, res, next) => {
   // console.log(req.user.id);
@@ -109,3 +109,23 @@ export const deleteYoutubeAuthToken = async (req, res, next) => {
 };
 
 export default testUser;
+
+export const signOut = async (req, res, next) => {
+  try {
+    res.clearCookie("access_token", { httpOnly: true });
+    if (req.cookies?.auth_token) {
+      res.clearCookie("auth_token", { httpOnly: true });
+    }
+
+    return res.status(200).json({ message: "User sign out successful" });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const accessTokenCheck = async (req, res, next) => {
+  if (!req.cookies?.access_token) {
+    return res.status(401).json({ message: "You are not authenticated" });
+  }
+  return res.status(200).json({ message: "Authenticated" });
+};

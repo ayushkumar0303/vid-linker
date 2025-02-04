@@ -1,11 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { SiLinkfire } from "react-icons/si";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { signOutSuccess } from "../store/store";
 
 function Header() {
   const { currentUser } = useSelector((state) => state.user);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleSignOut = async () => {
+    try {
+      const res = await fetch("/server/user/sign-out", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (res.ok) {
+        dispatch(signOutSuccess());
+        navigate("/auth");
+      } else {
+        console.log(data);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   // console.log(currentUser);
   // const [user, setUser] = useState({});
   // useEffect(() => {
@@ -48,7 +67,12 @@ function Header() {
                   rounded
                 >
                   <div className="space-y-1 font-medium dark:text-white">
-                    <div>{currentUser.name}</div>
+                    <div className="">
+                      {`${currentUser.name.split(" ")[0]} `}
+                      <span className="text-xs font-sans text-red-500">
+                        ({currentUser.role})
+                      </span>
+                    </div>
                     <div className="text-sm text-gray-500 dark:text-gray-400">
                       {`Joined in ${new Date(
                         currentUser.createdAt
@@ -74,7 +98,7 @@ function Header() {
                 <Dropdown.Item>Profile</Dropdown.Item>
               </Link>
               <Dropdown.Divider />
-              <Dropdown.Item>Sign out</Dropdown.Item>
+              <Dropdown.Item onClick={handleSignOut}>Sign out</Dropdown.Item>
             </Dropdown>
             <Navbar.Toggle />
           </>

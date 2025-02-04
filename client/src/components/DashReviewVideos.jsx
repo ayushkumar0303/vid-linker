@@ -6,7 +6,7 @@ import { Link } from "react-router";
 function DashReviewVideos() {
   const { currentUser } = useSelector((state) => state.user);
   const [videosForReview, setVideosForReview] = useState([]);
-  console.log(videosForReview);
+  // console.log(videosForReview);
   useEffect(() => {
     const fetchReviewVideos = async () => {
       try {

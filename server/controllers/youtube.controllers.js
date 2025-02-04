@@ -10,7 +10,7 @@ import jwt from "jsonwebtoken";
 const streamPipeline = promisify(pipeline);
 
 export const youtubeConnect = async (req, res) => {
-  console.log("inside youtube connect");
+  // console.log("inside youtube connect");
   const { videoId } = req.query;
   const url = oauth2Client.generateAuthUrl({
     access_type: "offline",
@@ -28,7 +28,7 @@ export const youtubeConnect = async (req, res) => {
 };
 
 export const youtubeCallback = async (req, res) => {
-  console.log("inside youtube callback");
+  // console.log("inside youtube callback");
 
   // console.log(req.query);
   // const { code, state } = req.query;
@@ -36,7 +36,7 @@ export const youtubeCallback = async (req, res) => {
   // const { username, videoId } = JSON.parse(state);
   // console.log(username);
   // console.log(videoId);
-  console.log(state);
+  // console.log(state);
 
   if (!code || !state)
     return res.status(400).json({ message: "Missing parameters" });
@@ -64,7 +64,7 @@ export const youtubeCallback = async (req, res) => {
 };
 
 export const youtubeUpload = async (req, res, next) => {
-  console.log("youtubeUplaod");
+  // console.log("youtubeUplaod");
   const { videoId } = req.query;
   const { username } = req.user;
   const tempFilePath = "./tempVideoForYoutube.mp4";
@@ -99,7 +99,7 @@ export const youtubeUpload = async (req, res, next) => {
     const { videoTitle, videoDiscription, videoUrl } = videoToUpload;
     const resUrl = await fetch(videoUrl);
     if (!resUrl.ok) {
-      return res.status(400).json("Failed to download file");
+      return res.status(400).json({ message: "Failed to download file" });
     }
     const fileStream = fs.createWriteStream(tempFilePath);
     await streamPipeline(resUrl.body, fileStream);

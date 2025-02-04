@@ -13,7 +13,7 @@ function UploadVideo() {
         `/server/youtube/upload/${currentUser?._id}?videoId=${videoId}`
       );
       const data = await res.json();
-      console.log(data);
+      // console.log(data);
       if (res.ok) {
         navigate("/dashboard");
       } else {

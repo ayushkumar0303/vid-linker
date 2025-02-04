@@ -1,15 +1,31 @@
 import { useEffect } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import { Outlet } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchUserError,
   fetchUserStart,
   fetchUserSuccess,
+  signOutSuccess,
 } from "./store/store";
 
 function App() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.user);
+  useEffect(() => {
+    const cookieExists = async () => {
+      const res = await fetch(`/server/user/access-token-check`);
+      if (!res.ok) {
+        dispatch(signOutSuccess());
+        navigate("/auth");
+      }
+    };
+    cookieExists();
+  }, [currentUser?._id]);
+
+  // console.log("jdjdj");
   // const { currentUser } = useSelector((state) => state.user);
   // const dispatch = useDispatch();
   // useEffect(() => {

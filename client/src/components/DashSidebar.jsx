@@ -11,10 +11,13 @@ import {
 } from "react-icons/hi";
 import { MdRemoveRedEye } from "react-icons/md";
 import { BsYoutube } from "react-icons/bs";
-import { useSelector } from "react-redux";
-import { Link, useLocation } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router";
+import { signOutSuccess } from "../store/store";
 
 function DashSidebar() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const path = useLocation();
   const [tab, setTab] = useState("");
   useEffect(() => {
@@ -23,6 +26,23 @@ function DashSidebar() {
     setTab(urlTab);
   }, [path.search]);
   const { currentUser } = useSelector((state) => state.user);
+
+  const handleSignOut = async () => {
+    try {
+      const res = await fetch("/server/user/sign-out", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (res.ok) {
+        dispatch(signOutSuccess());
+        navigate("/auth");
+      } else {
+        console.log(data);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   return (
     <Sidebar aria-label="Default sidebar example" className="">
       <Sidebar.Items>
@@ -100,7 +120,9 @@ function DashSidebar() {
               </Link>
             </>
           )}
-          <Sidebar.Item icon={HiArrowSmRight}>Sign Out</Sidebar.Item>
+          <Sidebar.Item icon={HiArrowSmRight} onClick={handleSignOut}>
+            Sign Out
+          </Sidebar.Item>
         </Sidebar.ItemGroup>
       </Sidebar.Items>
     </Sidebar>

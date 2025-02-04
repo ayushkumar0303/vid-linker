@@ -81,20 +81,20 @@ function DashProfile() {
     // }
   };
   const handleSignOut = async () => {
-    // try {
-    //   const res = await fetch("/server/user/sign-out", {
-    //     method: "POST",
-    //   });
-    //   const data = await res.json();
-    //   if (res.ok) {
-    //     dispatch(signOutSuccess());
-    //     navigate("/signin");
-    //   } else {
-    //     console.log(data);
-    //   }
-    // } catch (error) {
-    //   console.log(error.message);
-    // }
+    try {
+      const res = await fetch("/server/user/sign-out", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (res.ok) {
+        dispatch(signOutSuccess());
+        navigate("/signin");
+      } else {
+        console.log(data);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   };
   useEffect(() => {
     dispatch(updateError(null));

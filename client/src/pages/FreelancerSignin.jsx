@@ -8,7 +8,7 @@ function FreelancerSignin() {
   const [formdata, setFormData] = useState({});
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.currentUser);
-  console.log(currentUser);
+  // console.log(currentUser);
   const dispatch = useDispatch();
   // console.log(formdata);
   const handleFormSubmit = async (event) => {

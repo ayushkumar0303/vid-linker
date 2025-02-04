@@ -13,7 +13,7 @@ export const uploadVideo = async (req, res, next) => {
   try {
     const videoUpload = await Video({ clientId, freelancerId, videoUrl });
     await videoUpload.save();
-    return res.status(200).json("video uploaded successfully");
+    return res.status(200).json({ message: "video uploaded successfully" });
   } catch (error) {
     return next(error);
   }
@@ -65,7 +65,9 @@ export const setVideoMetaData = async (req, res, next) => {
       return next(errorHander(404, "Video not found"));
     }
 
-    return res.status(200).json("Video meta data set successfully");
+    return res
+      .status(200)
+      .json({ message: "Video meta data set successfully" });
   } catch (error) {
     return next(error);
   }
