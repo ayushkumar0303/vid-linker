@@ -2,7 +2,7 @@ import Video from "../models/video.models.js";
 import errorHander from "../utils/error.js";
 
 export const uploadVideo = async (req, res, next) => {
-  const { clientId, freelancerId, videoUrl } = req.body;
+  const { clientId, videoUrl } = req.body;
   // console.log(clientId);
   // console.log(freelancerId);
   // console.log(videoUrl);
@@ -11,7 +11,11 @@ export const uploadVideo = async (req, res, next) => {
   }
 
   try {
-    const videoUpload = await Video({ clientId, freelancerId, videoUrl });
+    const videoUpload = await Video({
+      clientId,
+      freelancerId: req.user.id,
+      videoUrl,
+    });
     await videoUpload.save();
     return res.status(200).json({ message: "video uploaded successfully" });
   } catch (error) {
@@ -21,7 +25,7 @@ export const uploadVideo = async (req, res, next) => {
 
 export const getReviewVideos = async (req, res, next) => {
   // console.log("hfhfh");
-  const clientId = req.user.username;
+  const clientId = req.user.id;
   if (req.user.id !== req.params.userId) {
     return next(errorHander(401, "You are not authenticated"));
   }
@@ -29,8 +33,11 @@ export const getReviewVideos = async (req, res, next) => {
   try {
     const videos = await Video.find({ clientId });
     // console.log(videos);
+    const videosForReview = videos.filter(
+      (video) => video.videoStatus === "pending"
+    );
 
-    return res.status(200).json(videos);
+    return res.status(200).json({ videos, videosForReview });
   } catch (error) {
     console.log(error);
   }
@@ -50,7 +57,7 @@ export const setVideoMetaData = async (req, res, next) => {
     const video = await Video.findByIdAndUpdate(
       {
         _id: req.params.videoId,
-        clientId: req.user.username,
+        clientId: req.user.id,
       },
       {
         $set: {

@@ -3,12 +3,12 @@ import mongoose from "mongoose";
 const videoSchema = new mongoose.Schema(
   {
     freelancerId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
     clientId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       requrired: true,
       ref: "User", // Foreign Key (References Users collection)
     },

@@ -72,7 +72,6 @@ export const signin = async (req, res, next) => {
         id: validUser._id,
         role: validUser.role,
         isAdmin: validUser.isAdmin,
-        username: validUser.username,
       },
       process.env.JWT_SECRET
     );
@@ -100,7 +99,6 @@ export const googleClient = async (req, res, next) => {
           id: user._id,
           role: user.role,
           isAdmin: user.isAdmin,
-          username: user.username,
         },
         process.env.JWT_SECRET
       );
@@ -135,7 +133,6 @@ export const googleClient = async (req, res, next) => {
             id: newUser._id,
             isAdmin: newUser.isAdmin,
             role: newUser.role,
-            username: newUser.username,
           },
           process.env.JWT_SECRET
         );

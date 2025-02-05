@@ -1,6 +1,14 @@
-import { Button, FileInput, Label, TextInput } from "flowbite-react";
+import {
+  Button,
+  FileInput,
+  Label,
+  List,
+  Select,
+  TextInput,
+} from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 import { storage } from "../appwrite";
 import { ID } from "appwrite";
 
@@ -9,7 +17,14 @@ function DashUploadVideo() {
   const [formData, setFormData] = useState({});
   const [video, setVideo] = useState(null);
   const [videoUploadLoading, setVideoUploadLoading] = useState(false);
+  const [selectedClient, setSelectedClient] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [clientFound, setClientFound] = useState(true);
+  const [clientsSuggestions, setClientsSuggestions] = useState([]);
+  const navigate = useNavigate();
   // console.log(formData);
+  // console.log(clientsSuggestions);
+  // console.log(clientQuery);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -43,6 +58,45 @@ function DashUploadVideo() {
       uploadFile();
     }
   }, [video]);
+
+  useEffect(() => {
+    if (searchQuery.length === 0) {
+      setClientsSuggestions([]);
+      return;
+    }
+    const delayDebounce = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `/server/user/fetch-clients?search=${searchQuery}`
+        );
+        const data = await res.json();
+        // console.log(data);
+        if (res.ok) {
+          setClientsSuggestions(data);
+          setClientFound(true);
+        } else {
+          // console.log(data);
+          setClientFound(false);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }, 300);
+    // fetchClients(searchQuery);
+    return () => clearTimeout(delayDebounce);
+  }, [searchQuery]);
+
+  const handleClientSelect = (client) => {
+    setFormData({ ...formData, clientId: client._id });
+    setSearchQuery(client.username);
+    setSelectedClient(true);
+  };
+  const handleClientChange = async (event) => {
+    // console.log(event.target.value);
+    setSearchQuery(event.target.value);
+    // setClientQuery(event.target.value);
+    setSelectedClient(false);
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -54,12 +108,19 @@ function DashUploadVideo() {
         },
         body: JSON.stringify(formData),
       });
+
+      const data = await res.json();
+      if (res.ok) {
+        navigate("/dashboard");
+      } else {
+        console.log(data);
+      }
     } catch (error) {
       console.log(error);
     }
   };
   return (
-    <div>
+    <div className="relative">
       <form onSubmit={handleSubmit}>
         <Label>
           Client User Id
@@ -67,12 +128,32 @@ function DashUploadVideo() {
             type="text"
             required={true}
             placeholder="Client User Id"
-            onChange={(e) =>
-              setFormData({ ...formData, clientId: e.target.value })
-            }
+            value={searchQuery}
+            onChange={(event) => handleClientChange(event)}
           />
         </Label>
-        <Label>
+        {clientsSuggestions.length > 0 && !selectedClient && (
+          <List className="absolute z-10 bg-white w-full list-none border-2 p-3 border-teal-600 border-solid shadow-lg rounded-lg mt-0">
+            {clientsSuggestions.map((client) => (
+              <List.Item
+                className="border p-2 cursor-pointer shadow-md rounded-md"
+                key={client._id}
+                onClick={() => handleClientSelect(client)}
+              >
+                {client.username}
+              </List.Item>
+            ))}
+          </List>
+        )}
+        {!clientFound && (
+          <List className="absolute z-10 bg-white w-full list-none border-2 p-3 border-teal-600 border-solid shadow-lg rounded-lg mt-0">
+            <List.Item className="border p-2 cursor-pointer shadow-md rounded-md">
+              No client found
+            </List.Item>
+          </List>
+        )}
+
+        {/* <Label>
           Your User Id (freelancer userId )
           <TextInput
             type="text"
@@ -82,7 +163,7 @@ function DashUploadVideo() {
               setFormData({ ...formData, freelancerId: e.target.value })
             }
           />
-        </Label>
+        </Label> */}
         <div className="flex w-full items-center justify-center">
           <Label
             htmlFor="dropzone-file"
@@ -121,7 +202,12 @@ function DashUploadVideo() {
             />
           </Label>
         </div>
-        <Button type="submit" outline disabled={videoUploadLoading}>
+
+        <Button
+          type="submit"
+          outline
+          disabled={videoUploadLoading || !selectedClient}
+        >
           Upload video
         </Button>
       </form>

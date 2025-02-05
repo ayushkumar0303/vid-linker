@@ -5,6 +5,7 @@ import testUser, {
   getUser,
   signOut,
   updateUser,
+  fetchClients,
 } from "../controllers/user.controllers.js";
 import verifyToken from "../utils/verifyToken.js";
 
@@ -20,5 +21,6 @@ userRouter.put(
   deleteYoutubeAuthToken
 );
 userRouter.post("/sign-out", signOut);
+userRouter.get("/fetch-clients", fetchClients);
 
 export default userRouter;

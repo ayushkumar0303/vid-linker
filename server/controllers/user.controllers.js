@@ -129,3 +129,24 @@ export const accessTokenCheck = async (req, res, next) => {
   }
   return res.status(200).json({ message: "Authenticated" });
 };
+
+export const fetchClients = async (req, res, next) => {
+  const { search } = req.query;
+  // console.log(search);
+  if (search.length === 0) {
+    return res.status(200).json([]);
+  }
+  try {
+    const clients = await User.find({
+      username: { $regex: `^${search}`, $options: "i" }, // Case-insensitive regex
+      role: "client",
+    }).limit(5);
+    // console.log(clients);
+    if (clients.length === 0) {
+      return res.status(400).json({ message: "No clients found" });
+    }
+    return res.status(200).json(clients);
+  } catch (error) {
+    return next(error);
+  }
+};
