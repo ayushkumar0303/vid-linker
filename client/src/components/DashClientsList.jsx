@@ -2,21 +2,21 @@ import { Table } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-function DashFreelancerList() {
+function DashClientsList() {
   const { currentUser } = useSelector((state) => state.user);
-  const [freelancersList, setFreelancersList] = useState([]);
+  const [clientsList, setClientsList] = useState([]);
   // console.log(freelacersList[0].populate(freelacersList[0].clientId));
   // console.log(freelacersList);
   useEffect(() => {
-    const fetchFreelancerList = async () => {
+    const fetchClientsList = async () => {
       try {
         const res = await fetch(
-          `/server/video/get-freelancers-list/${currentUser?._id}`
+          `/server/video/get-clients-list/${currentUser?._id}`
         );
         const data = await res.json();
         // console.log(data);
         if (res.ok) {
-          setFreelancersList(data);
+          setClientsList(data);
         } else {
           console.log(error);
         }
@@ -24,7 +24,7 @@ function DashFreelancerList() {
         console.log(error);
       }
     };
-    fetchFreelancerList();
+    fetchClientsList();
   }, [currentUser?._id]);
 
   return (
@@ -32,31 +32,31 @@ function DashFreelancerList() {
       <Table hoverable>
         <Table.Head>
           <Table.HeadCell>Date</Table.HeadCell>
-          <Table.HeadCell>Freelancer user id</Table.HeadCell>
+          <Table.HeadCell>Client user id</Table.HeadCell>
           <Table.HeadCell>profile picture</Table.HeadCell>
           <Table.HeadCell>name</Table.HeadCell>
           <Table.HeadCell>email</Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y">
-          {freelancersList.map((freelancer) => (
+          {clientsList.map((client) => (
             <Table.Row
-              key={freelancer._id}
+              key={client._id}
               className="bg-white dark:border-gray-700 dark:bg-gray-800 "
             >
               <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                {new Date(freelancer.createdAt).toLocaleDateString()}
+                {new Date(client.createdAt).toLocaleDateString()}
               </Table.Cell>
 
-              <Table.Cell>{freelancer.username}</Table.Cell>
+              <Table.Cell>{client.username}</Table.Cell>
               <Table.Cell>
                 <img
-                  src={freelancer.profilePicture}
-                  alt={freelancer.name}
+                  src={client.profilePicture}
+                  alt={client.name}
                   className="w-10 h-10 rounded-full"
                 />
               </Table.Cell>
-              <Table.Cell>{freelancer.name}</Table.Cell>
-              <Table.Cell>{freelancer.email}</Table.Cell>
+              <Table.Cell>{client.name}</Table.Cell>
+              <Table.Cell>{client.email}</Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
@@ -65,4 +65,4 @@ function DashFreelancerList() {
   );
 }
 
-export default DashFreelancerList;
+export default DashClientsList;

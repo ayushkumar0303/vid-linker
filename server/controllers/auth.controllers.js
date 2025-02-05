@@ -1,4 +1,4 @@
-import errorHander from "../utils/error.js";
+import errorHandler from "../utils/error.js";
 import User from "../models/user.models.js";
 import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
@@ -20,7 +20,7 @@ const signUp = async (req, res, next) => {
     email === "" ||
     password === ""
   ) {
-    next(errorHander(404, "All fields are required"));
+    next(errorHandler(404, "All fields are required"));
   }
 
   const username =
@@ -53,19 +53,19 @@ export const signin = async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password || email === "" || password === "") {
-    return next(errorHander(404, "All fields are required"));
+    return next(errorHandler(404, "All fields are required"));
   }
 
   try {
     const validUser = await User.findOne({ email });
 
     if (!validUser) {
-      return next(errorHander(404, "User not found"));
+      return next(errorHandler(404, "User not found"));
     }
 
     const validPassword = bcryptjs.compareSync(password, validUser.password);
     if (!validPassword) {
-      return next(errorHander(401, "Invalid password"));
+      return next(errorHandler(401, "Invalid password"));
     }
     const token = jwt.sign(
       {

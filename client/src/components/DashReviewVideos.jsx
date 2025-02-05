@@ -54,7 +54,7 @@ function DashReviewVideos() {
               <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                 {new Date(video.updatedAt).toLocaleTimeString()}
               </Table.Cell>
-              <Table.Cell>{video.freelancerId}</Table.Cell>
+              <Table.Cell>{video.freelancerId.username}</Table.Cell>
 
               <Table.Cell>
                 <video width="120" controls>

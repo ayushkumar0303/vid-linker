@@ -1,6 +1,8 @@
 import express from "express";
 import verifyToken from "../utils/verifyToken.js";
 import {
+  getClientsList,
+  getFreelancersList,
   getReviewVideos,
   setVideoMetaData,
   uploadVideo,
@@ -15,5 +17,12 @@ videoRouter.post(
   verifyToken,
   setVideoMetaData
 );
+
+videoRouter.get(
+  "/get-freelancers-list/:userId",
+  verifyToken,
+  getFreelancersList
+);
+videoRouter.get("/get-clients-list/:userId", verifyToken, getClientsList);
 
 export default videoRouter;

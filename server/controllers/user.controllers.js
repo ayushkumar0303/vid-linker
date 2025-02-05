@@ -1,5 +1,5 @@
 import User from "../models/user.models.js";
-import errorHander from "../utils/error.js";
+import errorHandler from "../utils/error.js";
 import bcryptjs from "bcryptjs";
 
 const testUser = (req, res) => {
@@ -10,7 +10,7 @@ export const getUser = async (req, res, next) => {
   // console.log(req.user.id);
   // console.log(req.params.userId);
   if (req.user.id !== req.params.userId) {
-    return next(errorHander(401, "You are not allowed to get this user"));
+    return next(errorHandler(401, "You are not allowed to get this user"));
   }
 
   try {
@@ -18,7 +18,7 @@ export const getUser = async (req, res, next) => {
     // console.log(user);
 
     if (!user) {
-      return next(errorHander(404, "User not found"));
+      return next(errorHandler(404, "User not found"));
     }
 
     const { password: _pass, ...rest } = user._doc;
@@ -32,11 +32,11 @@ export const updateUser = async (req, res, next) => {
   let { username, email, password } = req.body;
   // console.log(req.params.userId);
   if (req.user.id !== req.params.userId) {
-    return next(errorHander(401, "You are not allowed to update this user"));
+    return next(errorHandler(401, "You are not allowed to update this user"));
   }
   if (password) {
     if (password.length < 6) {
-      return next(errorHander(400, "Password must be at least 6 characters"));
+      return next(errorHandler(400, "Password must be at least 6 characters"));
     }
 
     password = bcryptjs.hashSync(password, 10);
@@ -45,20 +45,22 @@ export const updateUser = async (req, res, next) => {
   if (username) {
     if (username.length < 8 || username.length > 20) {
       return next(
-        errorHander(400, "Username must be in between 8 to 20 characters")
+        errorHandler(400, "Username must be in between 8 to 20 characters")
       );
     }
     if (username != username.toLowerCase()) {
-      return next(errorHander(400, "username must be in lower case"));
+      return next(errorHandler(400, "username must be in lower case"));
     }
 
     if (username.includes(" ")) {
-      return next(errorHander(400, "Username should not contain white spaces"));
+      return next(
+        errorHandler(400, "Username should not contain white spaces")
+      );
     }
 
     if (!username.match(/^[a-zA-Z0-9]+$/)) {
       return next(
-        errorHander(400, "Username must contain only numbers and letters")
+        errorHandler(400, "Username must contain only numbers and letters")
       );
     }
   }
@@ -87,7 +89,7 @@ export const deleteYoutubeAuthToken = async (req, res, next) => {
   // console.log("ddjjddj");
   if (req.user.id !== req.params.userId) {
     return next(
-      errorHander(401, "You are not allowed to delete the youtube auth token")
+      errorHandler(401, "You are not allowed to delete the youtube auth token")
     );
   }
 

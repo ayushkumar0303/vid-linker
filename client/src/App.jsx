@@ -14,16 +14,16 @@ function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
-  useEffect(() => {
-    const cookieExists = async () => {
-      const res = await fetch(`/server/user/access-token-check`);
-      if (!res.ok) {
-        dispatch(signOutSuccess());
-        navigate("/auth");
-      }
-    };
-    cookieExists();
-  }, [currentUser?._id]);
+  // useEffect(() => {
+  //   const cookieExists = async () => {
+  //     const res = await fetch(`/server/user/access-token-check`);
+  //     if (!res.ok) {
+  //       dispatch(signOutSuccess());
+  //       navigate("/auth");
+  //     }
+  //   };
+  //   cookieExists();
+  // }, [currentUser?._id]);
 
   // console.log("jdjdj");
   // const { currentUser } = useSelector((state) => state.user);

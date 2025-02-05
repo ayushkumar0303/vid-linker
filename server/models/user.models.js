@@ -30,9 +30,6 @@ const userSchema = new mongoose.Schema(
       default:
         "https://th.bing.com/th/id/OIP.F5__MKT22Z4iwy-s2YJFHgAAAA?rs=1&pid=ImgDetMain",
     },
-    youtubeAuthToken: {
-      type: Object,
-    },
   },
   { timestamps: true }
 );

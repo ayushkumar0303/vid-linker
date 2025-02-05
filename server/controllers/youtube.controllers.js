@@ -2,7 +2,7 @@ import { google } from "googleapis";
 import oauth2Client from "../googleAuth.js";
 import Video from "../models/video.models.js";
 import fs from "fs";
-import errorHander from "../utils/error.js";
+import errorHandler from "../utils/error.js";
 import { pipeline } from "stream";
 import { promisify } from "util";
 import jwt from "jsonwebtoken";
@@ -69,12 +69,12 @@ export const youtubeUpload = async (req, res, next) => {
   const { username } = req.user;
   const tempFilePath = "./tempVideoForYoutube.mp4";
   if (req.user.id !== req.params.userId) {
-    return next(errorHander(401, "You are not allowed to upload this video"));
+    return next(errorHandler(401, "You are not allowed to upload this video"));
   }
 
   const authToken = req.cookies.auth_token;
   if (!authToken) {
-    return next(errorHander(401, "You are not allowed to upload this video"));
+    return next(errorHandler(401, "You are not allowed to upload this video"));
   }
 
   jwt.verify(authToken, process.env.JWT_SECRET, (error, youtubeTokens) => {

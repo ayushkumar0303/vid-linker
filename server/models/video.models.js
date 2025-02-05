@@ -9,7 +9,7 @@ const videoSchema = new mongoose.Schema(
     },
     clientId: {
       type: mongoose.Schema.Types.ObjectId,
-      requrired: true,
+      required: true,
       ref: "User", // Foreign Key (References Users collection)
     },
     videoUrl: {
@@ -24,7 +24,7 @@ const videoSchema = new mongoose.Schema(
     videoTitle: {
       type: String,
     },
-    videoDiscription: {
+    videoDescription: {
       type: String,
     },
   },

@@ -6,6 +6,7 @@ import DashUploadVideo from "../components/DashUploadVideo";
 import DashReviewVideos from "../components/DashReviewVideos";
 import { useSelector } from "react-redux";
 import DashFreelancerList from "../components/DashFreelancerList";
+import DashClientsList from "../components/DashClientsList";
 
 function Dashboard() {
   const { currentUser } = useSelector((state) => state.user);
@@ -24,7 +25,10 @@ function Dashboard() {
       <div>
         {tab === "profile" && <DashProfile />}
         {currentUser?.role === "freelancer" && (
-          <>{tab === "video-upload" && <DashUploadVideo />}</>
+          <>
+            {tab === "video-upload" && <DashUploadVideo />}
+            {tab === "clients" && <DashClientsList />}
+          </>
         )}
 
         {currentUser?.role === "client" && (
