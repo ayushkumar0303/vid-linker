@@ -19,6 +19,7 @@ function DashSidebar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const path = useLocation();
+  console.log(path);
   const [tab, setTab] = useState("");
   useEffect(() => {
     const urlParams = new URLSearchParams(path.search);
@@ -44,16 +45,14 @@ function DashSidebar() {
     }
   };
   return (
-    <Sidebar aria-label="Default sidebar example" className="">
-      <Sidebar.Items>
+    <Sidebar
+      aria-label="Default sidebar example"
+      className="border-r border-black min-h-screen rounded-md"
+    >
+      <Sidebar.Items className="">
         <Sidebar.ItemGroup>
           <Link to="/dashboard">
-            <Sidebar.Item
-              href="#"
-              icon={HiChartPie}
-              as={"div"}
-              active={tab === ""}
-            >
+            <Sidebar.Item href="#" icon={HiChartPie} as={"div"} active={!tab}>
               Dashboard
             </Sidebar.Item>
           </Link>
@@ -120,7 +119,11 @@ function DashSidebar() {
               </Link>
             </>
           )}
-          <Sidebar.Item icon={HiArrowSmRight} onClick={handleSignOut}>
+          <Sidebar.Item
+            icon={HiArrowSmRight}
+            className="cursor-pointer"
+            onClick={handleSignOut}
+          >
             Sign Out
           </Sidebar.Item>
         </Sidebar.ItemGroup>

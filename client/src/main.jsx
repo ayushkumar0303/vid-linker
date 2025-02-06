@@ -21,6 +21,7 @@ import PrivateDash from "./components/PrivateDash.jsx";
 import VideoApprove from "./components/VideoApprove.jsx";
 import VideoReject from "./components/VideoReject.jsx";
 import UploadVideo from "./components/UploadVideo.jsx";
+import DashComponent from "./components/FreelancerDashComponent.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -33,7 +34,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/dashboard" element={<PrivateDash />}>
-              {/* <Route index element={<Dashboard />} /> */}
+              {/* <Route index element={<DashComponent />} /> */}
               <Route path="approve/:videoId" element={<VideoApprove />} />
               <Route path="reject/:videoId" element={<VideoReject />} />
               <Route path="upload/:videoId" element={<UploadVideo />} />

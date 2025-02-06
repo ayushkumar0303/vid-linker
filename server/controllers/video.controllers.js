@@ -40,13 +40,33 @@ export const getReviewVideos = async (req, res, next) => {
     const videosForReview = videos.filter(
       (video) => video.videoStatus === "Pending"
     );
-
+    console.log(videosForReview);
     return res.status(200).json({ videos, videosForReview });
   } catch (error) {
     return next(error);
   }
 };
+export const getVideos = async (req, res, next) => {
+  // console.log("hfhfh");
+  const freelancerId = req.user.id;
+  // console.log("freelancerID", freelancerId);
+  if (req.user.id !== req.params.userId) {
+    return next(errorHandler(401, "You are not authenticated"));
+  }
 
+  try {
+    const videos = await Video.find({ freelancerId }).populate(
+      "clientId",
+      "username"
+    );
+
+    console.log(videos);
+
+    return res.status(200).json({ videos });
+  } catch (error) {
+    return next(error);
+  }
+};
 export const setVideoMetaData = async (req, res, next) => {
   const { title, description } = req.body;
   if (req.user.id !== req.params.userId) {
@@ -125,13 +145,34 @@ export const getFreelancersList = async (req, res, next) => {
       },
       "name username email profilePicture updatedAt createdAt"
     );
-
+    // console.log(freelancersList);
     // console.log(videos);
     if (freelancersList.length === 0) {
       return next(errorHandler(404, "Not found any freelancer"));
     }
-    console.log(freelancersList);
-    return res.status(200).json(freelancersList);
+    const freelancerCount = freelancersList.length;
+    const now = new Date();
+
+    const oneMonthAgoDate = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+    // console.log(oneMonthAgoDate);
+    const oneMonthAgoFreelancers = await User.find({
+      _id: { $in: distinctFreelancers },
+      createAt: { $gte: oneMonthAgoDate },
+    });
+
+    const oneMonthAgoFreelancerCount = oneMonthAgoFreelancers.length;
+
+    // console.log(freelancersList);
+    return res.status(200).json({
+      freelancersList,
+      freelancerCount,
+      oneMonthAgoFreelancers,
+      oneMonthAgoFreelancerCount,
+    });
   } catch (error) {
     return next(error);
   }
@@ -159,8 +200,30 @@ export const getClientsList = async (req, res, next) => {
     if (clientList.length === 0) {
       return next(errorHandler(404, "Not found any client"));
     }
+
+    const totalClients = clientList.length;
+    const now = new Date();
+
+    const oneMonthAgoDate = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+
+    const oneMonthAgoClients = await User.find({
+      _id: {
+        $in: distinctClients,
+      },
+      createdAt: { $gte: oneMonthAgoDate },
+    });
+    const oneMonthAgoClientsTotal = oneMonthAgoClients.length;
     console.log(clientList);
-    return res.status(200).json(clientList);
+    return res.status(200).json({
+      clientList,
+      oneMonthAgoClients,
+      totalClients,
+      oneMonthAgoClientsTotal,
+    });
   } catch (error) {
     return next(error);
   }

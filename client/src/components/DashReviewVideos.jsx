@@ -57,7 +57,7 @@ function DashReviewVideos() {
               <Table.Cell>{video.freelancerId.username}</Table.Cell>
 
               <Table.Cell>
-                <video width="120" controls>
+                <video controls className="w-24 h-28">
                   <source src={video.videoUrl} type="video/mp4" />
                   Your browser does not support the video.
                 </video>

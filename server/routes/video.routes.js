@@ -4,6 +4,7 @@ import {
   getClientsList,
   getFreelancersList,
   getReviewVideos,
+  getVideos,
   setVideoMetaData,
   uploadVideo,
 } from "../controllers/video.controllers.js";
@@ -12,6 +13,7 @@ const videoRouter = express.Router();
 
 videoRouter.post("/upload-video/:userId", verifyToken, uploadVideo);
 videoRouter.get("/get-review-videos/:userId", verifyToken, getReviewVideos);
+videoRouter.get("/get-videos/:userId", verifyToken, getVideos);
 videoRouter.post(
   "/set-meta-data/:userId/:videoId",
   verifyToken,

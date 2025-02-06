@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 function DashFreelancerList() {
   const { currentUser } = useSelector((state) => state.user);
-  const [freelancersList, setFreelancersList] = useState([]);
+  const [freelancers, setFreelancers] = useState([]);
   // console.log(freelacersList[0].populate(freelacersList[0].clientId));
   // console.log(freelacersList);
   useEffect(() => {
@@ -14,9 +14,9 @@ function DashFreelancerList() {
           `/server/video/get-freelancers-list/${currentUser?._id}`
         );
         const data = await res.json();
-        // console.log(data);
+        // console.log(data.freelancersList);
         if (res.ok) {
-          setFreelancersList(data);
+          setFreelancers(data.freelancersList);
         } else {
           console.log(error);
         }
@@ -38,7 +38,7 @@ function DashFreelancerList() {
           <Table.HeadCell>email</Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y">
-          {freelancersList.map((freelancer) => (
+          {freelancers.map((freelancer) => (
             <Table.Row
               key={freelancer._id}
               className="bg-white dark:border-gray-700 dark:bg-gray-800 "

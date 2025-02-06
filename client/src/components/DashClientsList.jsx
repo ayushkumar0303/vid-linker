@@ -16,7 +16,7 @@ function DashClientsList() {
         const data = await res.json();
         // console.log(data);
         if (res.ok) {
-          setClientsList(data);
+          setClientsList(data.clientList);
         } else {
           console.log(error);
         }
