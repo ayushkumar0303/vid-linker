@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import Header from "./components/Header";
-import Footer from "./components/Footer";
+import Footer from "./components/FooterComponent";
 import { Outlet, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import {

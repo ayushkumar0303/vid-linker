@@ -9,13 +9,14 @@ import {
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { storage } from "../appwrite";
+import { storage } from "../../appwrite";
 import { ID } from "appwrite";
 
 function DashUploadVideo() {
   const { currentUser } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({});
   const [video, setVideo] = useState(null);
+  const [videoPreviewUrl, setVideoPreviewUrl] = useState("");
   const [videoUploadLoading, setVideoUploadLoading] = useState(false);
   const [selectedClient, setSelectedClient] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -46,9 +47,10 @@ function DashUploadVideo() {
       if (res?.$id) {
         const result = storage.getFileView("679e19a3001ccb5a563f", res.$id);
         setFormData({ ...formData, videoUrl: result.href });
+        setVideoPreviewUrl(result.href);
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
     setVideoUploadLoading(false);
   };
@@ -76,10 +78,11 @@ function DashUploadVideo() {
           setClientFound(true);
         } else {
           // console.log(data);
+          setClientsSuggestions([]);
           setClientFound(false);
         }
       } catch (error) {
-        console.log(error);
+        console.log(error.message);
       }
     }, 300);
     // fetchClients(searchQuery);
@@ -116,28 +119,32 @@ function DashUploadVideo() {
         console.log(data);
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
   return (
-    <div className="relative">
+    <div className="relative p-6 bg-white shadow-lg rounded-lg w-full max-w-md mx-auto my-10">
       <form onSubmit={handleSubmit}>
-        <Label>
+        {/* Client User Id Section */}
+        <Label className="block mb-4 text-lg font-semibold text-gray-700">
           Client User Id
           <TextInput
             type="text"
-            required={true}
+            required
             placeholder="Client User Id"
             value={searchQuery}
             onChange={(event) => handleClientChange(event)}
+            className="mt-2"
           />
         </Label>
+
+        {/* Client Suggestions Dropdown */}
         {clientsSuggestions.length > 0 && !selectedClient && (
-          <List className="absolute z-10 bg-white w-full list-none border-2 p-3 border-teal-600 border-solid shadow-lg rounded-lg mt-0">
+          <List className="absolute z-10 bg-white w-full list-none border-2 p-3 border-green-500 shadow-lg rounded-lg mt-0">
             {clientsSuggestions.map((client) => (
               <List.Item
-                className="border p-2 cursor-pointer shadow-md rounded-md"
                 key={client._id}
+                className="border p-2 cursor-pointer hover:bg-green-100 rounded-md"
                 onClick={() => handleClientSelect(client)}
               >
                 {client.username}
@@ -145,33 +152,25 @@ function DashUploadVideo() {
             ))}
           </List>
         )}
+
+        {/* No client found message */}
         {!clientFound && (
-          <List className="absolute z-10 bg-white w-full list-none border-2 p-3 border-teal-600 border-solid shadow-lg rounded-lg mt-0">
-            <List.Item className="border p-2 cursor-pointer shadow-md rounded-md">
+          <List className="absolute z-10 bg-white w-full list-none border-2 p-3 border-green-500 shadow-lg rounded-lg mt-0">
+            <List.Item className="border p-2 text-gray-500">
               No client found
             </List.Item>
           </List>
         )}
 
-        {/* <Label>
-          Your User Id (freelancer userId )
-          <TextInput
-            type="text"
-            required={true}
-            placeholder="Freelancer User Id"
-            onChange={(e) =>
-              setFormData({ ...formData, freelancerId: e.target.value })
-            }
-          />
-        </Label> */}
-        <div className="flex w-full items-center justify-center">
+        {/* File Upload Section */}
+        <div className="mt-6 w-full">
           <Label
             htmlFor="dropzone-file"
-            className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 required:true"
+            className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 "
           >
             <div className="flex flex-col items-center justify-center pb-6 pt-5">
               <svg
-                className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
+                className="mb-4 h-8 w-8 text-gray-500 "
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -185,12 +184,12 @@ function DashUploadVideo() {
                   d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                 />
               </svg>
-              <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+              <p className="mb-2 text-sm text-gray-500 ">
                 <span className="font-semibold">Click to upload</span> or drag
                 and drop
               </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                SVG, PNG, JPG or GIF (MAX. 800x400px)
+              <p className="text-xs text-gray-500 ">
+                SVG, PNG, JPG, or GIF (MAX. 800x400px)
               </p>
             </div>
             <input
@@ -199,17 +198,29 @@ function DashUploadVideo() {
               required
               onChange={handleFileChange}
               id="dropzone-file"
+              className="hidden"
             />
           </Label>
         </div>
-
-        <Button
-          type="submit"
-          outline
-          disabled={videoUploadLoading || !selectedClient}
-        >
-          Upload video
-        </Button>
+        {videoPreviewUrl && (
+          <div className="mt-6 w-full">
+            <video controls className="w-full h-56">
+              <source src={videoPreviewUrl} />
+            </video>
+          </div>
+        )}
+        {/* Submit Button */}
+        <div className="mt-6">
+          <Button
+            type="submit"
+            gradientMonochrome="success"
+            // outline
+            disabled={videoUploadLoading || !selectedClient}
+            className="w-full py-1 px-2 bg-teal-500 text-white rounded-lg "
+          >
+            {videoUploadLoading ? "Uploading..." : "Upload Video"}
+          </Button>
+        </div>
       </form>
     </div>
   );

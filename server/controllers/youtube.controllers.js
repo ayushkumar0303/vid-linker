@@ -3,11 +3,8 @@ import oauth2Client from "../googleAuth.js";
 import Video from "../models/video.models.js";
 import fs from "fs";
 import errorHandler from "../utils/error.js";
-import { pipeline } from "stream";
-import { promisify } from "util";
+import { pipeline } from "stream/promises";
 import jwt from "jsonwebtoken";
-
-const streamPipeline = promisify(pipeline);
 
 export const youtubeConnect = async (req, res) => {
   // console.log("inside youtube connect");
@@ -56,7 +53,7 @@ export const youtubeCallback = async (req, res) => {
     // res.redirect(`http://localhost:5173/dashboard`);
 
     // // const { password: _pass, ...rest } = user._doc;
-    res.redirect(`http://localhost:5173/dashboard/upload/${state}`);
+    res.redirect(`http://localhost:5173/upload/${state}`);
   } catch (error) {
     // console.error(error);
     res.status(500).json({ message: "YouTube OAuth failed", error });
@@ -66,7 +63,9 @@ export const youtubeCallback = async (req, res) => {
 export const youtubeUpload = async (req, res, next) => {
   // console.log("youtubeUplaod");
   const { videoId } = req.query;
-  const { username } = req.user;
+  const { id } = req.user;
+  console.log(videoId);
+  console.log(id);
   const tempFilePath = "./tempVideoForYoutube.mp4";
   if (req.user.id !== req.params.userId) {
     return next(errorHandler(401, "You are not allowed to upload this video"));
@@ -93,7 +92,7 @@ export const youtubeUpload = async (req, res, next) => {
   try {
     const videoToUpload = await Video.findOne({
       _id: videoId,
-      clientId: username,
+      clientId: id,
     });
 
     const { videoTitle, videoDiscription, videoUrl } = videoToUpload;
@@ -102,7 +101,7 @@ export const youtubeUpload = async (req, res, next) => {
       return res.status(400).json({ message: "Failed to download file" });
     }
     const fileStream = fs.createWriteStream(tempFilePath);
-    await streamPipeline(resUrl.body, fileStream);
+    await pipeline(resUrl.body, fileStream);
     // console.log(fileStream);
     const response = await youtube.videos.insert({
       part: "snippet,status",
@@ -122,8 +121,19 @@ export const youtubeUpload = async (req, res, next) => {
     // console.log(response);
 
     fs.unlink(tempFilePath, (err) => {
-      return next(err);
+      if (err) {
+        return next(err);
+      }
     });
+
+    // console.log(videoToUpload);
+    // console.log(response);
+    // console.log(response.statusText);
+
+    if (response.status === 200) {
+      videoToUpload.videoStatus = "Approved";
+      await videoToUpload.save();
+    }
 
     // console.log("Upload response:", response.data);
     return res.status(200).json(response.data);

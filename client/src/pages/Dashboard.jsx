@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import DashSidebar from "../components/DashSidebar";
 import { Outlet, useLocation } from "react-router";
 import DashProfile from "../components/DashProfile";
-import DashUploadVideo from "../components/DashUploadVideo";
-import DashReviewVideos from "../components/DashReviewVideos";
+import DashUploadVideo from "../components/freelancer/DashUploadVideo";
+import DashReviewVideos from "../components/clients/DashReviewVideos";
 import { useSelector } from "react-redux";
-import DashFreelancerList from "../components/DashFreelancerList";
-import DashClientsList from "../components/DashClientsList";
-import FreelancerDashComponent from "../components/FreelancerDashComponent";
-import ClientDashComponent from "../components/ClientDashComponent";
+import DashFreelancerList from "../components/clients/DashFreelancerList";
+import DashClientsList from "../components/freelancer/DashClientsList";
+import FreelancerDashComponent from "../components/freelancer/FreelancerDashComponent";
+import ClientDashComponent from "../components/clients/ClientDashComponent";
 
 function Dashboard() {
   const { currentUser } = useSelector((state) => state.user);
@@ -24,7 +24,7 @@ function Dashboard() {
       <div>
         <DashSidebar />
       </div>
-      <div>
+      <div className="flex flex-col w-full">
         {tab === "profile" && <DashProfile />}
         {currentUser?.role === "freelancer" && (
           <>

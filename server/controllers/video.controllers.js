@@ -40,7 +40,7 @@ export const getReviewVideos = async (req, res, next) => {
     const videosForReview = videos.filter(
       (video) => video.videoStatus === "Pending"
     );
-    console.log(videosForReview);
+    // console.log(videosForReview);
     return res.status(200).json({ videos, videosForReview });
   } catch (error) {
     return next(error);
@@ -60,7 +60,7 @@ export const getVideos = async (req, res, next) => {
       "username"
     );
 
-    console.log(videos);
+    // console.log(videos);
 
     return res.status(200).json({ videos });
   } catch (error) {
@@ -87,7 +87,6 @@ export const setVideoMetaData = async (req, res, next) => {
         $set: {
           videoTitle: title,
           videoDescription: description,
-          videoStatus: "Approved",
         },
       },
       { new: true }
@@ -106,7 +105,7 @@ export const setVideoMetaData = async (req, res, next) => {
 
 export const getFreelancersList = async (req, res, next) => {
   const clientId = req.user.id;
-  console.log(clientId);
+  // console.log(clientId);
   if (req.user.id !== req.params.userId) {
     return next(errorHandler(401, "Not allowed to do this"));
   }
@@ -180,7 +179,7 @@ export const getFreelancersList = async (req, res, next) => {
 
 export const getClientsList = async (req, res, next) => {
   const freelancerId = req.user.id;
-  console.log(freelancerId);
+  // console.log(freelancerId);
   if (req.user.id !== req.params.userId) {
     return next(errorHandler(401, "Not allowed to do this"));
   }
@@ -217,7 +216,7 @@ export const getClientsList = async (req, res, next) => {
       createdAt: { $gte: oneMonthAgoDate },
     });
     const oneMonthAgoClientsTotal = oneMonthAgoClients.length;
-    console.log(clientList);
+    // console.log(clientList);
     return res.status(200).json({
       clientList,
       oneMonthAgoClients,

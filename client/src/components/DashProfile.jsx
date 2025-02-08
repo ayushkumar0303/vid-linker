@@ -88,7 +88,7 @@ function DashProfile() {
       const data = await res.json();
       if (res.ok) {
         dispatch(signOutSuccess());
-        navigate("/signin");
+        navigate("/auth");
       } else {
         console.log(data);
       }
@@ -104,20 +104,23 @@ function DashProfile() {
   // console.log(imageURL);
   // console.log(currentUser.profilePicture);
   return (
-    <div className=" pt-14 flex flex-grow flex-col items-center">
+    <div className="p-10 flex flex-grow flex-col items-center ">
       {currentUser && (
         <Card className="min-w-96">
           <h1 className="flex font-bold text-5xl justify-center pb-5">
             Profile
           </h1>
           <form className="pt-4 flex flex-col gap-3" onSubmit={handleFormData}>
+            {/* Profile Image */}
             <div className="flex justify-center relative min-h-24 ">
               <img
                 src={currentUser.profilePicture}
-                className={`rounded-full h-24 w-24 object-cover `}
+                className="rounded-full h-24 w-24 object-cover"
+                alt="Profile Picture"
               />
             </div>
 
+            {/* Username Input */}
             <TextInput
               type="text"
               id="username"
@@ -125,6 +128,8 @@ function DashProfile() {
               placeholder="Username"
               defaultValue={currentUser.username}
             />
+
+            {/* Email Input */}
             <TextInput
               type="email"
               id="email"
@@ -132,6 +137,8 @@ function DashProfile() {
               placeholder="Email"
               defaultValue={currentUser.email}
             />
+
+            {/* Password Input */}
             <TextInput
               type="password"
               ref={password}
@@ -139,6 +146,8 @@ function DashProfile() {
               placeholder="Enter password (Old or New if want to change)"
               required
             />
+
+            {/* Submit Button */}
             <Button type="submit" outline>
               {loading ? (
                 <>
@@ -150,6 +159,8 @@ function DashProfile() {
               )}
             </Button>
           </form>
+
+          {/* Delete Account & Sign Out */}
           <div className="flex justify-between mt-2">
             <span
               className="text-red-400 cursor-pointer"
@@ -164,23 +175,26 @@ function DashProfile() {
               Sign Out
             </span>
           </div>
+
+          {/* Error and Success Alerts */}
           <div className="pt-2">
             {error && <Alert color="failure">{error}</Alert>}
-
             {userUpdateSuccess && (
               <Alert color="success">Update successful</Alert>
             )}
           </div>
+
+          {/* Delete Account Modal */}
           <Modal show={showModal} onClose={() => setShowModal(false)}>
             <Modal.Header />
             <Modal.Body>
               <div className="text-center">
-                <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
-                <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400" />
+                <h3 className="mb-5 text-lg font-normal text-gray-500 ">
                   Are you sure you want to delete your account?
                 </h3>
                 <div className="flex justify-center gap-4">
-                  <Button color="failure" onClick={() => handleDeleteUser()}>
+                  <Button color="failure" onClick={handleDeleteUser}>
                     {"Yes, I'm sure"}
                   </Button>
                   <Button color="gray" onClick={() => setShowModal(false)}>

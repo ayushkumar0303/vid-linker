@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { SiLinkfire } from "react-icons/si";
 import { useDispatch, useSelector } from "react-redux";
 import { signOutSuccess } from "../store/store";
 
 function Header() {
   const { currentUser } = useSelector((state) => state.user);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const handleSignOut = async () => {
     try {
       const res = await fetch("/server/user/sign-out", {
@@ -36,58 +38,52 @@ function Header() {
   //         setUser(data.users[0]);
   //       }
   //     } catch (error) {
-  //       console.log(error);
+  //       console.log(error.message);
   //     }
   //   };
   //   getUser();
   // }, [currentUser]);
   return (
-    <Navbar fluid rounded className="border border-b-gray-700">
+    <Navbar fluid rounded className="border-b-2 border-green-500 shadow-md">
+      {/* Brand Logo */}
       <Navbar.Brand>
-        <div className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white ">
-          <p className="flex justify-center items-center gap-1">
-            Vid
-            <span className="text-green-500">
-              <SiLinkfire />
-            </span>
-            Linker
-          </p>
+        <div className="text-2xl font-semibold flex items-center gap-1">
+          Vid
+          <span className="text-green-500">
+            <SiLinkfire />
+          </span>
+          Linker
         </div>
       </Navbar.Brand>
-      <div className="flex md:order-2">
+
+      {/* Right Section */}
+      <div className="flex items-center md:order-2">
         {currentUser && currentUser._id ? (
           <>
+            {/* User Dropdown */}
             <Dropdown
-              // arrowIcon={false}
               inline
+              arrowIcon={false}
               label={
-                <Avatar
-                  alt="User settings"
-                  img={currentUser.profilePicture}
-                  rounded
-                >
-                  <div className="space-y-1 font-medium dark:text-white">
-                    <div className="">
-                      {`${currentUser.name.split(" ")[0]} `}
-                      <span className="text-xs font-sans text-red-500">
-                        ({currentUser.role})
-                      </span>
-                    </div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                <Avatar img={currentUser.profilePicture} rounded>
+                  <div className="space-y-1 font-medium ">
+                    <div>{currentUser.name.split(" ")[0]}</div>
+                    <div className="text-sm text-gray-500 ">
                       {`Joined in ${new Date(
                         currentUser.createdAt
-                      ).toLocaleString("en-us", {
+                      ).toLocaleString("default", {
                         month: "long",
-                      })}
-                      ${new Date(currentUser.createdAt).getFullYear()}`}
+                      })} ${new Date(currentUser.createdAt).getFullYear()}`}
                     </div>
                   </div>
                 </Avatar>
               }
             >
               <Dropdown.Header>
-                <span className="block text-sm">@{currentUser.username}</span>
-                <span className="block truncate text-sm font-medium">
+                <span className="block text-sm font-medium">
+                  @{currentUser.username}
+                </span>
+                <span className="block text-xs text-gray-500">
                   {currentUser.email}
                 </span>
               </Dropdown.Header>
@@ -98,8 +94,10 @@ function Header() {
                 <Dropdown.Item>Profile</Dropdown.Item>
               </Link>
               <Dropdown.Divider />
-              <Dropdown.Item onClick={handleSignOut}>Sign out</Dropdown.Item>
+              <Dropdown.Item onClick={handleSignOut}>Sign Out</Dropdown.Item>
             </Dropdown>
+
+            {/* Navbar Toggle (Mobile Menu) */}
             <Navbar.Toggle />
           </>
         ) : (
@@ -110,18 +108,28 @@ function Header() {
           </Link>
         )}
       </div>
-      <Navbar.Collapse>
-        <Navbar.Link as={"div"}>
-          <Link to="/">Home</Link>
+
+      {/* Navigation Links */}
+      <Navbar.Collapse className="md:flex md:space-x-6">
+        <Navbar.Link as="div">
+          <Link to="/" className="hover:text-green-500 transition">
+            Home
+          </Link>
         </Navbar.Link>
-        <Navbar.Link as={"div"}>
-          <Link to="/about">About</Link>
+        <Navbar.Link as="div">
+          <Link to="/about" className="hover:text-green-500 transition">
+            About
+          </Link>
         </Navbar.Link>
-        <Navbar.Link as={"div"}>
-          <Link to="/pricing">Pricing</Link>
+        <Navbar.Link as="div">
+          <Link to="/pricing" className="hover:text-green-500 transition">
+            Pricing
+          </Link>
         </Navbar.Link>
-        <Navbar.Link as={"div"}>
-          <Link to="/contact-us">Contact</Link>
+        <Navbar.Link as="div">
+          <Link to="/contact-us" className="hover:text-green-500 transition">
+            Contact
+          </Link>
         </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>

@@ -19,7 +19,7 @@ function DashSidebar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const path = useLocation();
-  console.log(path);
+  // console.log(path);
   const [tab, setTab] = useState("");
   useEffect(() => {
     const urlParams = new URLSearchParams(path.search);
@@ -47,7 +47,7 @@ function DashSidebar() {
   return (
     <Sidebar
       aria-label="Default sidebar example"
-      className="border-r border-black min-h-screen rounded-md"
+      className="border-r-2 border-green-500 min-h-screen rounded-md"
     >
       <Sidebar.Items className="">
         <Sidebar.ItemGroup>
