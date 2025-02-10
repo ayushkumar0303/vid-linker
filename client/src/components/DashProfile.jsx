@@ -52,7 +52,7 @@ function DashProfile() {
         dispatch(updateSuccess(data));
         setUserUpdateSuccess("User's Update Successfull");
       } else {
-        dispatch(updateError(data));
+        dispatch(updateError(data.message));
       }
     } catch (error) {
       // console.log(error.message);
@@ -73,7 +73,7 @@ function DashProfile() {
     //     dispatch(deleteSuccess());
     //     navigate("/signIn");
     //   } else {
-    //     dispatch(deleteFailure(data));
+    //     dispatch(deleteFailure(data.message));
     //   }
     // } catch (error) {
     //   // console.log(error.message);
@@ -148,7 +148,7 @@ function DashProfile() {
             />
 
             {/* Submit Button */}
-            <Button type="submit" outline>
+            <Button type="submit" gradientMonochrome="success">
               {loading ? (
                 <>
                   <Spinner aria-label="Spinner button example" size="sm" />

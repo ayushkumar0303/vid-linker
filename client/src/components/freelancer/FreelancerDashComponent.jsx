@@ -66,19 +66,30 @@ function ClientDashComponent() {
                 <Table.HeadCell>Name</Table.HeadCell>
               </Table.Head>
               <Table.Body className="divide-y">
-                {clients.map((client) => (
-                  <Table.Row key={client._id} className="hover:bg-gray-100">
-                    <Table.Cell className="p-3">{client.username}</Table.Cell>
-                    <Table.Cell className="p-3">
-                      <img
-                        src={client.profilePicture}
-                        alt={client.name}
-                        className="w-10 h-10 rounded-full border"
-                      />
+                {clients.length > 0 ? (
+                  clients.map((client) => (
+                    <Table.Row key={client._id} className="hover:bg-gray-100">
+                      <Table.Cell className="p-3">{client.username}</Table.Cell>
+                      <Table.Cell className="p-3">
+                        <img
+                          src={client.profilePicture}
+                          alt={client.name}
+                          className="w-10 h-10 rounded-full border"
+                        />
+                      </Table.Cell>
+                      <Table.Cell className="p-3">{client.name}</Table.Cell>
+                    </Table.Row>
+                  ))
+                ) : (
+                  <Table.Row>
+                    <Table.Cell
+                      colSpan="3"
+                      className="text-center text-gray-500 py-4"
+                    >
+                      No clients available
                     </Table.Cell>
-                    <Table.Cell className="p-3">{client.name}</Table.Cell>
                   </Table.Row>
-                ))}
+                )}
               </Table.Body>
             </Table>
           </div>
@@ -104,32 +115,43 @@ function ClientDashComponent() {
                 <Table.HeadCell>Status</Table.HeadCell>
               </Table.Head>
               <Table.Body className="divide-y">
-                {videosForReview.map((video) => (
-                  <Table.Row key={video._id} className="hover:bg-gray-100">
-                    <Table.Cell className="p-3">
-                      {video.clientId.username}
-                    </Table.Cell>
-                    <Table.Cell className="p-3">
-                      <video controls className="w-24 h-28 rounded-md border">
-                        <source src={video.videoUrl} />
-                        Error loading video
-                      </video>
-                    </Table.Cell>
-                    <Table.Cell className="p-3">
-                      <span
-                        className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                          video.videoStatus === "Approved"
-                            ? "bg-green-100 text-green-600"
-                            : video.videoStatus === "Pending"
-                            ? "bg-yellow-100 text-yellow-600"
-                            : "bg-red-100 text-red-600"
-                        }`}
-                      >
-                        {video.videoStatus}
-                      </span>
+                {videosForReview.length > 0 ? (
+                  videosForReview.map((video) => (
+                    <Table.Row key={video._id} className="hover:bg-gray-100">
+                      <Table.Cell className="p-3">
+                        {video.clientId.username}
+                      </Table.Cell>
+                      <Table.Cell className="p-3">
+                        <video controls className="w-24 h-28 rounded-md border">
+                          <source src={video.videoUrl} />
+                          Error loading video
+                        </video>
+                      </Table.Cell>
+                      <Table.Cell className="p-3">
+                        <span
+                          className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                            video.videoStatus === "Approved"
+                              ? "bg-green-100 text-green-600"
+                              : video.videoStatus === "Pending"
+                              ? "bg-yellow-100 text-yellow-600"
+                              : "bg-red-100 text-red-600"
+                          }`}
+                        >
+                          {video.videoStatus}
+                        </span>
+                      </Table.Cell>
+                    </Table.Row>
+                  ))
+                ) : (
+                  <Table.Row>
+                    <Table.Cell
+                      colSpan="5"
+                      className="text-center text-gray-500 py-4"
+                    >
+                      No Videos Sent for Review
                     </Table.Cell>
                   </Table.Row>
-                ))}
+                )}
               </Table.Body>
             </Table>
           </div>

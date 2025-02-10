@@ -1,4 +1,4 @@
-import { Button, TextInput } from "flowbite-react";
+import { Alert, Button, TextInput } from "flowbite-react";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router";
@@ -10,7 +10,9 @@ import { app } from "../firebase";
 function ClientSignin() {
   const [formData, setFormData] = useState({});
   const navigate = useNavigate();
-  const currentUser = useSelector((state) => state.currentUser);
+  const { currentUser, error: errorMessage } = useSelector(
+    (state) => state.user
+  );
   // console.log(currentUser);
   const dispatch = useDispatch();
 
@@ -41,10 +43,10 @@ function ClientSignin() {
         navigate("/");
         dispatch(signInSuccess(data));
       } else {
-        dispatch(signInFailure(data));
+        dispatch(signInFailure(data.message));
       }
     } catch (error) {
-      console.log(error.message);
+      dispatch(signInFailure(error.message));
     }
   };
   const handleFormSubmit = async (event) => {
@@ -68,15 +70,19 @@ function ClientSignin() {
         dispatch(signInFailure(data.message));
       }
     } catch (error) {
+      dispatch(signInFailure(error.message));
       console.log(error.message);
     }
   };
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="max-w-sm w-full bg-white p-6 rounded-lg shadow-md">
+    <div className="flex justify-center">
+      <div className="max-w-sm w-full bg-white p-6 m-3 rounded-lg shadow-md border-2">
         <h2 className="text-center text-2xl font-semibold text-gray-800 mb-4">
           Sign In
         </h2>
+        <p className="text-sm text-gray-500 text-center mb-4">
+          Join as a Client.
+        </p>
         <form className="flex flex-col gap-3" onSubmit={handleFormSubmit}>
           {/* Email Input */}
           <TextInput
@@ -135,6 +141,11 @@ function ClientSignin() {
             Join with Google
           </Button>
         </div>
+        {errorMessage && (
+          <Alert className="mt-2" color="failure">
+            {errorMessage}
+          </Alert>
+        )}
       </div>
     </div>
   );

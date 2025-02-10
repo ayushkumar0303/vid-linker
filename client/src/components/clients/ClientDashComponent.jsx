@@ -71,19 +71,30 @@ function FreelancerDashComponent() {
                 <Table.HeadCell>Name</Table.HeadCell>
               </Table.Head>
               <Table.Body className="divide-y">
-                {freelancers.map((freelancer) => (
-                  <Table.Row key={freelancer._id} className="bg-white ">
-                    <Table.Cell>{freelancer.username}</Table.Cell>
-                    <Table.Cell>
-                      <img
-                        src={freelancer.profilePicture}
-                        alt={freelancer.name}
-                        className="w-12 h-12 rounded-full"
-                      />
+                {freelancers.length > 0 ? (
+                  freelancers.map((freelancer) => (
+                    <Table.Row key={freelancer._id} className="bg-white ">
+                      <Table.Cell>{freelancer.username}</Table.Cell>
+                      <Table.Cell>
+                        <img
+                          src={freelancer.profilePicture}
+                          alt={freelancer.name}
+                          className="w-12 h-12 rounded-full"
+                        />
+                      </Table.Cell>
+                      <Table.Cell>{freelancer.name}</Table.Cell>
+                    </Table.Row>
+                  ))
+                ) : (
+                  <Table.Row>
+                    <Table.Cell
+                      colSpan="3"
+                      className="text-center text-gray-500 py-4"
+                    >
+                      No Freelancer available
                     </Table.Cell>
-                    <Table.Cell>{freelancer.name}</Table.Cell>
                   </Table.Row>
-                ))}
+                )}
               </Table.Body>
             </Table>
           </div>
@@ -112,47 +123,47 @@ function FreelancerDashComponent() {
                 <Table.HeadCell>Status</Table.HeadCell>
               </Table.Head>
               <Table.Body className="divide-y">
-                {videosForReview.map((video) => (
-                  <Table.Row key={video._id} className="bg-white ">
-                    <Table.Cell>{video.freelancerId.username}</Table.Cell>
-                    <Table.Cell>
-                      <video controls className="w-24 h-28 rounded-md">
-                        <source src={video.videoUrl} type="video/mp4" />
-                        Your browser does not support the video.
-                      </video>
-                    </Table.Cell>
-                    <Table.Cell>
-                      <span
-                        className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                          video.videoStatus === "Approved"
-                            ? "text-green-600 bg-green-100"
-                            : video.videoStatus === "Pending"
-                            ? "text-yellow-600 bg-yellow-100"
-                            : "text-red-600 bg-red-100"
-                        } font-semibold`}
-                      >
-                        {video.videoStatus}
-                      </span>
+                {videosForReview.length > 0 ? (
+                  videosForReview.map((video) => (
+                    <Table.Row key={video._id} className="bg-white ">
+                      <Table.Cell>{video.freelancerId.username}</Table.Cell>
+                      <Table.Cell>
+                        <video controls className="w-24 h-28 rounded-md">
+                          <source src={video.videoUrl} type="video/mp4" />
+                          Your browser does not support the video.
+                        </video>
+                      </Table.Cell>
+                      <Table.Cell>
+                        <span
+                          className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                            video.videoStatus === "Approved"
+                              ? "text-green-600 bg-green-100"
+                              : video.videoStatus === "Pending"
+                              ? "text-yellow-600 bg-yellow-100"
+                              : "text-red-600 bg-red-100"
+                          } font-semibold`}
+                        >
+                          {video.videoStatus}
+                        </span>
+                      </Table.Cell>
+                    </Table.Row>
+                  ))
+                ) : (
+                  <Table.Row>
+                    <Table.Cell
+                      colSpan="3"
+                      className="text-center text-gray-500 py-4"
+                    >
+                      No Videos
                     </Table.Cell>
                   </Table.Row>
-                ))}
+                )}
               </Table.Body>
             </Table>
           </div>
         </div>
       </div>
       {/* Additional Information */}
-      <div className="mt-8 p-4 bg-white shadow-md rounded-lg">
-        <h3 className="text-lg font-semibold text-gray-800">
-          Welcome to the Client Dashboard
-        </h3>
-        <p className="text-gray-600 mt-2">
-          As a client, you can view all available freelancers and their
-          profiles. You can also track the videos that have been uploaded by
-          freelancers for review. If you want to see more, simply click "See
-          More" to view additional freelancers or videos.
-        </p>
-      </div>
     </div>
   );
 }

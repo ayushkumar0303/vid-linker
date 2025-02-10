@@ -2,8 +2,10 @@ import React from "react";
 import { Link } from "react-router";
 import { Button, Card, List } from "flowbite-react";
 import { HiCheckCircle } from "react-icons/hi";
+import { useSelector } from "react-redux";
 
 function Home() {
+  const { currentUser } = useSelector((state) => state.user);
   return (
     <div className="min-h-screen bg-white">
       <header className="text-center py-16 px-4">
@@ -14,11 +16,21 @@ function Home() {
           🚀 Seamless collaboration between clients & freelancers. Upload videos
           directly to YouTube securely and efficiently.
         </p>
-        <div className="flex justify-center">
-          <Button gradientDuoTone="greenToBlue" className="mt-6">
-            Get Started
-          </Button>
-        </div>
+        {!currentUser ? (
+          <div className="flex justify-center">
+            <Link to="/auth">
+              <Button gradientDuoTone="greenToBlue" className="mt-6">
+                Get Started
+              </Button>
+            </Link>
+          </div>
+        ) : (
+          <div className="flex justify-center">
+            <p className="font-bold text-xl mt-6 bg-green-100 text-green-500 px-2 py-1 rounded-md shadow-sm">
+              {`Welcome! ${currentUser.name.split(" ")[0]}`}
+            </p>
+          </div>
+        )}
       </header>
 
       {/* How It Works */}
@@ -85,11 +97,17 @@ function Home() {
 
       {/* Start Using */}
       <section className="py-16 text-center">
-        <h2 className="text-3xl font-semibold">🚀 Start Using It Today!</h2>
+        <h2 className="text-3xl font-semibold">{` 🚀 Start Using It ${
+          currentUser ? currentUser.name.split(" ")[0] : "Today"
+        }!`}</h2>
         <div className="flex justify-center">
-          <Button gradientDuoTone="greenToBlue" className="mt-6">
-            Sign Up Now
-          </Button>
+          {!currentUser && (
+            <Link to="/auth">
+              <Button gradientDuoTone="greenToBlue" className="mt-6">
+                Sign Up Now
+              </Button>
+            </Link>
+          )}
         </div>
       </section>
     </div>

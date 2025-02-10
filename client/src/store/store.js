@@ -70,6 +70,18 @@ export const userSlice = createSlice({
       state.loading = false;
       state.currentUser = action.payload;
     },
+    fetchSuccess: (state, action) => {
+      state.error = null;
+      state.loading = false;
+    },
+    fetchFailure: (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    },
+    fetchStart: (state, action) => {
+      state.error = null;
+      state.loading = true;
+    },
   },
 });
 
@@ -87,6 +99,9 @@ export const {
   fetchUserError,
   fetchUserSuccess,
   fetchUserStart,
+  fetchStart,
+  fetchFailure,
+  fetchSuccess,
 } = userSlice.actions;
 
 const rootReducer = combineReducers({

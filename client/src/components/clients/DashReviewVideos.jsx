@@ -7,6 +7,7 @@ function DashReviewVideos() {
   const { currentUser } = useSelector((state) => state.user);
   const [videosForReview, setVideosForReview] = useState([]);
   // console.log(videosForReview);
+  const [hover, setHover] = useState(false);
   useEffect(() => {
     const fetchReviewVideos = async () => {
       try {
@@ -71,11 +72,18 @@ function DashReviewVideos() {
                 {/* Approve and Reject Links */}
                 <Table.Cell>
                   <a
+                    onMouseEnter={() => setHover(true)}
+                    onMouseLeave={() => setHover(false)}
                     href={`/server/youtube/connect/${currentUser?._id}?videoId=${video._id}`}
                     className="rounded-full font-medium text-green-600 hover:underline px-2 py-1 hover:bg-green-100"
                   >
                     Approve
                   </a>
+                  {hover && (
+                    <div className="absolute z-10 bg-green-100 px-2 py-1 bottom-7 right-20 rounded-lg text-green-500">
+                      Link your Youtube Account
+                    </div>
+                  )}
                 </Table.Cell>
                 <Table.Cell>
                   <Link

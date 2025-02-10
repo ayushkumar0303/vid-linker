@@ -1,5 +1,5 @@
-import { Button, TextInput } from "flowbite-react";
-import React, { useState } from "react";
+import { Alert, Button, TextInput } from "flowbite-react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router";
 import { signInFailure, signInStart, signInSuccess } from "../store/store";
@@ -10,10 +10,12 @@ import { app } from "../firebase";
 function FreelancerSignin() {
   const [formData, setFormData] = useState({});
   const navigate = useNavigate();
-  const currentUser = useSelector((state) => state.currentUser);
+  const { currentUser, error: errorMessage } = useSelector(
+    (state) => state.user
+  );
   // console.log(currentUser);
   const dispatch = useDispatch();
-
+  // console.log(errorMessage);
   // console.log(formdata);
   const handleGoogleAuth = async (event) => {
     event.preventDefault();
@@ -38,13 +40,15 @@ function FreelancerSignin() {
 
       const data = await res.json();
       if (res.ok) {
-        navigate("/");
+        console.log("this is respons");
         dispatch(signInSuccess(data));
+        navigate("/");
       } else {
-        dispatch(signInFailure(data));
+        console.log("this us data");
+        dispatch(signInFailure(data.message));
       }
     } catch (error) {
-      console.log(error.message);
+      dispatch(signInFailure(error.message));
     }
   };
   const handleFormSubmit = async (event) => {
@@ -61,22 +65,29 @@ function FreelancerSignin() {
       });
 
       const data = await res.json();
+      // console.log(data);
       if (res.ok) {
         dispatch(signInSuccess(data));
         navigate("/");
       } else {
+        // console.log("this is inside else");
         dispatch(signInFailure(data.message));
+        // console.log(data.message);
       }
     } catch (error) {
-      console.log(error.message);
+      dispatch(signInFailure(error.message));
     }
   };
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="max-w-sm w-full bg-white p-6 rounded-lg shadow-md">
+    <div className="flex justify-center">
+      <div className="max-w-sm w-full bg-white p-6 m-3 rounded-lg shadow-md border-2">
         <h2 className="text-center text-2xl font-semibold text-gray-800 mb-4">
           Sign In
         </h2>
+        <p className="text-sm text-gray-500 text-center mb-4">
+          Join as a Freelancer.
+        </p>
         <form className="flex flex-col gap-3" onSubmit={handleFormSubmit}>
           {/* Email Input */}
           <TextInput
@@ -135,6 +146,11 @@ function FreelancerSignin() {
             Join with Google
           </Button>
         </div>
+        {errorMessage && (
+          <Alert className="mt-2" color="failure">
+            {errorMessage}
+          </Alert>
+        )}
       </div>
     </div>
   );

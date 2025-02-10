@@ -37,7 +37,7 @@ function App() {
   //       if (res.ok) {
   //         dispatch(fetchUserSuccess(data));
   //       } else {
-  //         dispatch(fetchUserError(data));
+  //         dispatch(fetchUserError(data.message));
   //       }
   //     } catch (error) {
   //       dispatch(fetchUserError(error));

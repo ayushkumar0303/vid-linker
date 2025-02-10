@@ -5,12 +5,12 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBdAy8Z8LqM4izKFy8NgxBr7OVCLarCL-I",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: "vid-linker.firebaseapp.com",
   projectId: "vid-linker",
   storageBucket: "vid-linker.firebasestorage.app",
   messagingSenderId: "302125332293",
-  appId: "1:302125332293:web:362aff78436c2d0ff6b02c",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 // Initialize Firebase

@@ -146,9 +146,6 @@ export const getFreelancersList = async (req, res, next) => {
     );
     // console.log(freelancersList);
     // console.log(videos);
-    if (freelancersList.length === 0) {
-      return next(errorHandler(404, "Not found any freelancer"));
-    }
     const freelancerCount = freelancersList.length;
     const now = new Date();
 
@@ -196,9 +193,6 @@ export const getClientsList = async (req, res, next) => {
     );
 
     // console.log(videos);
-    if (clientList.length === 0) {
-      return next(errorHandler(404, "Not found any client"));
-    }
 
     const totalClients = clientList.length;
     const now = new Date();

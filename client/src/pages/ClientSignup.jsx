@@ -1,13 +1,17 @@
-import { Button, Select, TextInput } from "flowbite-react";
+import { Alert, Button, Select, TextInput } from "flowbite-react";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { FcGoogle } from "react-icons/fc";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase";
+import { signInFailure, signInStart, signInSuccess } from "../store/store";
+import { useDispatch, useSelector } from "react-redux";
 
 function ClientSignup() {
   const [formData, setFormData] = useState({});
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { error: errorMessage } = useSelector((state) => state.user);
   // console.log(formdata);
   const handleGoogleAuth = async (event) => {
     event.preventDefault();
@@ -35,10 +39,11 @@ function ClientSignup() {
         navigate("/");
         dispatch(signInSuccess(data));
       } else {
-        dispatch(signInFailure(data));
+        dispatch(signInFailure(data.message));
       }
     } catch (error) {
       console.log(error.message);
+      dispatch(signInFailure(error.message));
     }
   };
   const handleFormSubmit = async (event) => {
@@ -55,22 +60,24 @@ function ClientSignup() {
 
       const data = await res.json();
       if (res.ok) {
-        navigate("/auth");
+        navigate("/auth?tab=client-signin");
       } else {
-        console.log(data);
+        // console.log(data.message);
+        dispatch(signInFailure(data.message));
       }
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
+      dispatch(signInFailure(error.message));
     }
   };
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+    <div className="flex justify-center">
+      <div className="max-w-sm w-full bg-white p-6 m-3 rounded-lg shadow-md border-2">
         <h2 className="text-2xl font-bold text-center mb-2">
           Create Your Account
         </h2>
         <p className="text-sm text-gray-500 text-center mb-4">
-          Join as a Freelancer or as a Client.
+          Join as a Client.
         </p>
         <form className="flex flex-col gap-3" onSubmit={handleFormSubmit}>
           <TextInput
@@ -135,6 +142,11 @@ function ClientSignup() {
             Join with Google
           </Button>
         </div>
+        {errorMessage && (
+          <Alert className="mt-2" color="failure">
+            {errorMessage}
+          </Alert>
+        )}
       </div>
     </div>
   );

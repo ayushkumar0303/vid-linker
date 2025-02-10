@@ -29,3 +29,12 @@ app.use("/server/user", userRouter);
 app.use("/server/auth", authRouter);
 app.use("/server/youtube", youtubeRouter);
 app.use("/server/video", videoRouter);
+
+app.use((error, req, res, next) => {
+  const statusCode = error.statusCode || 500;
+  const message = error.message || "Internal Server Error";
+  return res.status(statusCode).json({
+    status: statusCode,
+    message,
+  });
+});

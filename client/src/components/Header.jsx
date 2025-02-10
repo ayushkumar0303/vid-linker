@@ -10,6 +10,12 @@ function Header() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+  const [path, setPath] = useState("");
+  useEffect(() => {
+    const pathname = location.pathname;
+    setPath(pathname);
+  });
 
   const handleSignOut = async () => {
     try {
@@ -112,22 +118,42 @@ function Header() {
       {/* Navigation Links */}
       <Navbar.Collapse className="md:flex md:space-x-6">
         <Navbar.Link as="div">
-          <Link to="/" className="hover:text-green-500 transition">
+          <Link
+            to="/"
+            className={`hover:text-green-500 transition ${
+              path === "/" ? "text-green-500" : ""
+            }`}
+          >
             Home
           </Link>
         </Navbar.Link>
         <Navbar.Link as="div">
-          <Link to="/about" className="hover:text-green-500 transition">
+          <Link
+            to="/about"
+            className={`hover:text-green-500 transition ${
+              path === "/about" ? "text-green-500" : ""
+            }`}
+          >
             About
           </Link>
         </Navbar.Link>
         <Navbar.Link as="div">
-          <Link to="/pricing" className="hover:text-green-500 transition">
+          <Link
+            to="/pricing"
+            className={`hover:text-green-500 transition ${
+              path === "/pricing" ? "text-green-500" : ""
+            }`}
+          >
             Pricing
           </Link>
         </Navbar.Link>
         <Navbar.Link as="div">
-          <Link to="/contact-us" className="hover:text-green-500 transition">
+          <Link
+            to="/contact-us"
+            className={`hover:text-green-500 transition ${
+              path === "/contact-us" ? "text-green-500" : ""
+            }`}
+          >
             Contact
           </Link>
         </Navbar.Link>
