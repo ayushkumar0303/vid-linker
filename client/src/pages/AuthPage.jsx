@@ -23,7 +23,7 @@ function AuthPage() {
 
   return (
     <div className="flex justify-center items-center min-h-screen p-6">
-      <div className="max-w-lg w-full bg-white py-6 px-3 rounded-lg shadow-lg border-2">
+      <div className="max-w-lg w-full bg-green-100 py-6 px-3 rounded-lg shadow-lg border-2">
         <h2 className="text-3xl font-semibold text-gray-800 mb-4 flex gap-2 justify-center">
           Welcome to the
           <div className="text-3xl font-semibold flex items-center gap-1">
@@ -41,7 +41,7 @@ function AuthPage() {
           <div className="flex justify-center gap-4 mb-4">
             <Link to="/auth?tab=client-signin">
               <button
-                className={`py-2 px-4 rounded-full border-2 border-green-500 shadow-md hover:bg-green-100 hover:text-gray-800 ${
+                className={`py-2 px-4 rounded-full border-2 border-green-500 shadow-md hover:bg-green-200 hover:text-gray-800 ${
                   tab?.includes("client")
                     ? "bg-green-500 text-white hover:bg-green-500 hover:text-white"
                     : ""
@@ -53,7 +53,7 @@ function AuthPage() {
 
             <Link to="/auth?tab=freelancer-signin">
               <button
-                className={` py-2 px-4 rounded-full border-2 border-green-500  hover:bg-green-100 hover:text-gray-800 shadow-md ${
+                className={` py-2 px-4 rounded-full border-2 border-green-500  hover:bg-green-200 hover:text-gray-800 shadow-md ${
                   tab?.includes("freelancer")
                     ? "bg-green-500 text-white hover:bg-green-500 hover:text-white"
                     : ""

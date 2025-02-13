@@ -108,7 +108,7 @@ function Header() {
           </>
         ) : (
           <Link to="/auth">
-            <Button color="success" outline>
+            <Button gradientMonochrome="success" outline>
               Sign In
             </Button>
           </Link>
@@ -137,7 +137,7 @@ function Header() {
             About
           </Link>
         </Navbar.Link>
-        <Navbar.Link as="div">
+        {/* <Navbar.Link as="div">
           <Link
             to="/pricing"
             className={`hover:text-green-500 transition ${
@@ -146,7 +146,7 @@ function Header() {
           >
             Pricing
           </Link>
-        </Navbar.Link>
+        </Navbar.Link> */}
         <Navbar.Link as="div">
           <Link
             to="/contact-us"

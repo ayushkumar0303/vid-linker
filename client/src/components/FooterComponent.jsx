@@ -26,9 +26,9 @@ function FooterComponent() {
             <Footer.Link as="div">
               <Link to="/about">About</Link>
             </Footer.Link>
-            <Footer.Link as="div">
-              <Link to="/pricing">Pricing</Link>
-            </Footer.Link>
+            {/* <Footer.Link as="div">
+                <Link to="/pricing">Pricing</Link>
+              </Footer.Link> */}
             <Footer.Link as="div">
               <Link to="/contact-us">Contact</Link>
             </Footer.Link>
@@ -40,8 +40,7 @@ function FooterComponent() {
 
         {/* Copyright Section */}
         <Footer.Copyright
-          href="#"
-          by="Vid-Linker™"
+          by="Vid-Linker™ Developed by Ayush Kumar"
           year={new Date().getFullYear()}
           className="text-gray-600"
         />

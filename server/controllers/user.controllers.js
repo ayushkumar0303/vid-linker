@@ -85,30 +85,30 @@ export const updateUser = async (req, res, next) => {
   }
 };
 
-export const deleteYoutubeAuthToken = async (req, res, next) => {
-  // console.log("ddjjddj");
-  if (req.user.id !== req.params.userId) {
-    return next(
-      errorHandler(401, "You are not allowed to delete the youtube auth token")
-    );
-  }
+// export const deleteYoutubeAuthToken = async (req, res, next) => {
+//   // console.log("ddjjddj");
+//   if (req.user.id !== req.params.userId) {
+//     return next(
+//       errorHandler(401, "You are not allowed to delete the youtube auth token")
+//     );
+//   }
 
-  try {
-    const user = await User.findByIdAndUpdate(
-      req.user.id,
-      {
-        $unset: {
-          youtubeAuthToken: "",
-        },
-      },
-      { new: true }
-    );
-    const { password: _pass, ...rest } = user._doc;
-    return res.status(200).json(rest);
-  } catch (error) {
-    return next(error);
-  }
-};
+//   try {
+//     const user = await User.findByIdAndUpdate(
+//       req.user.id,
+//       {
+//         $unset: {
+//           youtubeAuthToken: "",
+//         },
+//       },
+//       { new: true }
+//     );
+//     const { password: _pass, ...rest } = user._doc;
+//     return res.status(200).json(rest);
+//   } catch (error) {
+//     return next(error);
+//   }
+// };
 
 export default testUser;
 
@@ -150,5 +150,22 @@ export const fetchClients = async (req, res, next) => {
     return res.status(200).json(clients);
   } catch (error) {
     return next(error);
+  }
+};
+
+export const deleteUser = async (req, res, next) => {
+  if (req.user.id !== req.params.userId) {
+    return next(errorHandler(401, "You are not allowed to delete this user"));
+  }
+
+  try {
+    await User.findByIdAndDelete(req.user.id);
+    res.clearCookie("access_token", { httpOnly: true });
+    if (req.cookies?.auth_token) {
+      res.clearCookie("auth_token", { httpOnly: true });
+    }
+    return res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    next(error);
   }
 };

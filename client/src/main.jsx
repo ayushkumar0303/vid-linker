@@ -29,7 +29,7 @@ createRoot(document.getElementById("root")).render(
             <Route index element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact-us" element={<ContactUs />} />
-            <Route path="/pricing" element={<Pricing />} />
+            {/* <Route path="/pricing" element={<Pricing />} /> */}
             <Route path="/dashboard" element={<PrivateDash />} />
             <Route path="/auth" element={<AuthPage />} />
 

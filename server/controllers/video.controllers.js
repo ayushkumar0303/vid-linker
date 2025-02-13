@@ -185,12 +185,17 @@ export const getClientsList = async (req, res, next) => {
       freelancerId,
     });
 
+    const limit = parseInt(req.query.limit) || 9;
+    const startIndex = parseInt(req.query.startIndex) || 0;
     const clientList = await User.find(
       {
         _id: { $in: distinctClients },
       },
       "name username email profilePicture updatedAt createdAt"
-    );
+    )
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .skip(startIndex);
 
     // console.log(videos);
 

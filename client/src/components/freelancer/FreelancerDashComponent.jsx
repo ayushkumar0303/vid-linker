@@ -13,7 +13,7 @@ function ClientDashComponent() {
     const fetchClientsList = async () => {
       try {
         const res = await fetch(
-          `/server/video/get-clients-list/${currentUser?._id}`
+          `/server/video/get-clients-list/${currentUser?._id}?limit=5`
         );
         const data = await res.json();
         // console.log(data);
@@ -46,7 +46,7 @@ function ClientDashComponent() {
   return (
     <div className="space-y-8 p-6 bg-gray-100 min-h-screen">
       {/* Clients Section */}
-      <div className="flex justify-around">
+      <div className="flex justify-around items-start">
         <div className="bg-white shadow-md rounded-lg p-6">
           <div className="flex justify-between items-center border-b pb-3">
             <p className="text-lg font-semibold text-gray-800">

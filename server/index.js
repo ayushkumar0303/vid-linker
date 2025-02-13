@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import youtubeRouter from "./routes/youtube.routes.js";
 import videoRouter from "./routes/video.routes.js";
+
 const app = express();
 
 app.use(express.json());

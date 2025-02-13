@@ -17,30 +17,31 @@ function ContactUs() {
   const [messageSuccess, setMessageSuccess] = useState("");
   const [messageFailure, setMessageFailure] = useState("");
 
-  const handleSendMessage = async () => {
-    try {
-      const res = await fetch(`/server/contact/send-message`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application-json",
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          message,
-        }),
-      });
+  // const handleSendMessage = async (event) => {
+  //   event.preventDefault();
+  //   try {
+  //     const res = await fetch(`/server/contact/send-message`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         name: name.current.value,
+  //         email: email.current.value,
+  //         message: message.current.value,
+  //       }),
+  //     });
 
-      const data = await res.json();
-      if (res.ok) {
-        setMessageSuccess(data.message);
-      } else {
-        setMessageFailure(data.message);
-      }
-    } catch (error) {
-      setMessageFailure(data.message);
-    }
-  };
+  //     const data = await res.json();
+  //     if (res.ok) {
+  //       setMessageSuccess(data.message);
+  //     } else {
+  //       setMessageFailure(data.message);
+  //     }
+  //   } catch (error) {
+  //     setMessageFailure(error.message);
+  //   }
+  // };
   return (
     <div>
       <section className="text-center py-16 px-4">
@@ -53,11 +54,15 @@ function ContactUs() {
 
       {/* Contact Form & Info */}
 
-      <section className="py-16 px-6 max-w-5xl mx-auto grid md:grid-cols-2 gap-6">
+      <section className="py-16 px-6 max-w-5xl mx-auto gap-6">
         {/* Contact Form */}
-        <Card className="p-6 shadow-md border border-gray-200">
+        {/* <Card className="p-6 shadow-md border border-gray-200">
           <h2 className="text-2xl font-semibold mb-4">Send Us a Message</h2>
-          <form className="space-y-4" onSubmit={handleSendMessage}>
+          <form
+            className="space-y-4"
+            action="mailto:sams231334@gmail.cm"
+            method="POST"
+          >
             <TextInput
               type="text"
               placeholder="Your Name"
@@ -86,7 +91,7 @@ function ContactUs() {
           </form>
           {messageSuccess && <Alert color="success">{messageSuccess}</Alert>}
           {messageFailure && <Alert color="failure">{messageFailure}</Alert>}
-        </Card>
+        </Card> */}
 
         {/* Contact Information */}
         <Card className="p-6 shadow-md border border-gray-200 text-center">
@@ -95,7 +100,7 @@ function ContactUs() {
           <div className="mt-6 space-y-4">
             <div className="flex items-center justify-center gap-3">
               <HiMail className="text-green-500 text-2xl" />
-              <p className="text-gray-600">support@vidlinker.com</p>
+              <p className="text-gray-600">sams231334@gmail.com</p>
             </div>
             <div className="flex items-center justify-center gap-3">
               <HiPhone className="text-green-500 text-2xl" />

@@ -22,7 +22,7 @@ function About() {
         </p>
       </section>
       {/* Why Choose Us */}
-      <section className="py-16 px-6 bg-gray-100 w-full text-center">
+      <section className="py-16 px-6 bg-green-100 w-full text-center">
         <h2 className="text-3xl font-semibold">🌟 Why Choose Us?</h2>
         <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mt-6">
           <Card>
