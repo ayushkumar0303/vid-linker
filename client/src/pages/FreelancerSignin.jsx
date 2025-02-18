@@ -10,9 +10,11 @@ import { app } from "../firebase";
 function FreelancerSignin() {
   const [formData, setFormData] = useState({});
   const navigate = useNavigate();
-  const { currentUser, error: errorMessage } = useSelector(
-    (state) => state.user
-  );
+  const {
+    currentUser,
+    error: errorMessage,
+    loading,
+  } = useSelector((state) => state.user);
   // console.log(currentUser);
   const dispatch = useDispatch();
   // console.log(errorMessage);
@@ -114,7 +116,7 @@ function FreelancerSignin() {
           />
 
           {/* Submit Button */}
-          <Button type="submit" gradientMonochrome="success">
+          <Button type="submit" gradientMonochrome="success" disabled={loading}>
             Sign In
           </Button>
 
