@@ -5,10 +5,12 @@ import { useSelector } from "react-redux";
 function DashFreelancerList() {
   const { currentUser } = useSelector((state) => state.user);
   const [freelancers, setFreelancers] = useState([]);
+  const [loading, setLoading] = useState(false);
   // console.log(freelacersList[0].populate(freelacersList[0].clientId));
   // console.log(freelacersList);
   useEffect(() => {
     const fetchFreelancerList = async () => {
+      setLoading(true);
       try {
         const res = await fetch(
           `/server/video/get-freelancers-list/${currentUser?._id}`
@@ -23,12 +25,16 @@ function DashFreelancerList() {
       } catch (error) {
         console.log(error.message);
       }
+      setLoading(false);
     };
     fetchFreelancerList();
   }, [currentUser?._id]);
 
+  if (loading) {
+    return <h1 className="text-center">Loading...</h1>;
+  }
   return (
-    <div className="overflow-x-auto bg-white shadow-md rounded-lg p-6 m-6">
+    <div className="overflow-x-auto shadow-md rounded-lg p-6 m-6 bg-white">
       <Table hoverable>
         <Table.Head>
           <Table.HeadCell>Date</Table.HeadCell>

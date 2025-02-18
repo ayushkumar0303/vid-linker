@@ -52,8 +52,8 @@ function Header() {
   return (
     <Navbar fluid rounded className="border-b-2 border-green-500 shadow-md">
       {/* Brand Logo */}
-      <Navbar.Brand>
-        <div className="text-2xl font-semibold flex items-center gap-1">
+      <Navbar.Brand className="flex flex-col md:flex-row">
+        <div className="text-xl font-semibold flex  items-center justify-center gap-1 md:text-2xl ">
           Vid
           <span className="text-green-500">
             <SiLinkfire />
@@ -63,81 +63,86 @@ function Header() {
       </Navbar.Brand>
 
       {/* Right Section */}
-      <div className="flex items-center md:order-2">
-        {currentUser && currentUser._id ? (
-          <>
-            {/* User Dropdown */}
-            <Dropdown
-              inline
-              arrowIcon={false}
-              label={
-                <Avatar img={currentUser.profilePicture} rounded>
-                  <div className="space-y-1 font-medium ">
-                    <div>{currentUser.name.split(" ")[0]}</div>
-                    <div className="text-sm text-gray-500 ">
-                      {`Joined in ${new Date(
-                        currentUser.createdAt
-                      ).toLocaleString("default", {
-                        month: "long",
-                      })} ${new Date(currentUser.createdAt).getFullYear()}`}
-                    </div>
-                  </div>
-                </Avatar>
-              }
-            >
-              <Dropdown.Header>
-                <span className="block text-sm font-medium">
-                  @{currentUser.username}
-                </span>
-                <span className="block text-xs text-gray-500">
-                  {currentUser.email}
-                </span>
-              </Dropdown.Header>
-              <Link to="/dashboard">
-                <Dropdown.Item>Dashboard</Dropdown.Item>
-              </Link>
-              <Link to="/dashboard?tab=profile">
-                <Dropdown.Item>Profile</Dropdown.Item>
-              </Link>
-              <Dropdown.Divider />
-              <Dropdown.Item onClick={handleSignOut}>Sign Out</Dropdown.Item>
-            </Dropdown>
 
-            {/* Navbar Toggle (Mobile Menu) */}
-            <Navbar.Toggle />
-          </>
-        ) : (
-          <Link to="/auth">
-            <Button gradientMonochrome="success" outline>
-              Sign In
-            </Button>
-          </Link>
-        )}
-      </div>
+      <Navbar.Toggle />
 
       {/* Navigation Links */}
-      <Navbar.Collapse className="md:flex md:space-x-6">
-        <Navbar.Link as="div">
-          <Link
-            to="/"
-            className={`hover:text-green-500 transition ${
-              path === "/" ? "text-green-500" : ""
-            }`}
-          >
-            Home
-          </Link>
-        </Navbar.Link>
-        <Navbar.Link as="div">
-          <Link
-            to="/about"
-            className={`hover:text-green-500 transition ${
-              path === "/about" ? "text-green-500" : ""
-            }`}
-          >
-            About
-          </Link>
-        </Navbar.Link>
-        {/* <Navbar.Link as="div">
+      <Navbar.Collapse>
+        <div className="flex flex-col gap-2 md:flex-row md:gap-6 md:items-center">
+          <div className="flex items-center md:order-2 md:justify-end">
+            {currentUser && currentUser._id ? (
+              <>
+                {/* User Dropdown */}
+                <Dropdown
+                  inline
+                  arrowIcon={false}
+                  label={
+                    <Avatar img={currentUser.profilePicture} rounded>
+                      <div className="space-y-1 font-medium ">
+                        <div>{currentUser.name.split(" ")[0]}</div>
+                        <div className="text-sm text-gray-500 ">
+                          {`Joined in ${new Date(
+                            currentUser.createdAt
+                          ).toLocaleString("default", {
+                            month: "long",
+                          })} ${new Date(currentUser.createdAt).getFullYear()}`}
+                        </div>
+                      </div>
+                    </Avatar>
+                  }
+                >
+                  <Dropdown.Header>
+                    <span className="block text-sm font-medium">
+                      @{currentUser.username}
+                    </span>
+                    <span className="block text-xs text-gray-500">
+                      {currentUser.email}
+                    </span>
+                  </Dropdown.Header>
+                  <Link to="/dashboard">
+                    <Dropdown.Item>Dashboard</Dropdown.Item>
+                  </Link>
+                  <Link to="/dashboard?tab=profile">
+                    <Dropdown.Item>Profile</Dropdown.Item>
+                  </Link>
+                  <Dropdown.Divider />
+                  <Dropdown.Item onClick={handleSignOut}>
+                    Sign Out
+                  </Dropdown.Item>
+                </Dropdown>
+
+                {/* Navbar Toggle (Mobile Menu) */}
+              </>
+            ) : (
+              <Link to="/auth">
+                <Button gradientMonochrome="success" outline>
+                  Sign In
+                </Button>
+              </Link>
+            )}
+          </div>
+          <div className="flex flex-col justify-center md:flex-row md:gap-6 md:justify-end">
+            <Navbar.Link as="div">
+              <Link
+                to="/"
+                className={`hover:text-green-500 transition ${
+                  path === "/" ? "text-green-500" : ""
+                }`}
+              >
+                Home
+              </Link>
+            </Navbar.Link>
+            <Navbar.Link as="div">
+              <Link
+                to="/about"
+                className={`hover:text-green-500 transition ${
+                  path === "/about" ? "text-green-500" : ""
+                }`}
+              >
+                About
+              </Link>
+            </Navbar.Link>
+            {/* <Navbar.Link as="div">
           <Link
             to="/pricing"
             className={`hover:text-green-500 transition ${
@@ -147,16 +152,18 @@ function Header() {
             Pricing
           </Link>
         </Navbar.Link> */}
-        <Navbar.Link as="div">
-          <Link
-            to="/contact-us"
-            className={`hover:text-green-500 transition ${
-              path === "/contact-us" ? "text-green-500" : ""
-            }`}
-          >
-            Contact
-          </Link>
-        </Navbar.Link>
+            <Navbar.Link as="div">
+              <Link
+                to="/contact-us"
+                className={`hover:text-green-500 transition ${
+                  path === "/contact-us" ? "text-green-500" : ""
+                }`}
+              >
+                Contact
+              </Link>
+            </Navbar.Link>
+          </div>
+        </div>
       </Navbar.Collapse>
     </Navbar>
   );

@@ -9,7 +9,7 @@ export const clientSignup = async (req, res, next) => {
   let name = firstName;
 
   if (lastName) {
-    name = " " + lastName;
+    name += " " + lastName;
   }
   // console.log(name);
   if (
@@ -162,7 +162,7 @@ export const freelancerSignup = async (req, res, next) => {
   let name = firstName;
 
   if (lastName) {
-    name = " " + lastName;
+    name += " " + lastName;
   }
   // console.log(name);
   if (

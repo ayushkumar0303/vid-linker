@@ -9,6 +9,8 @@ import DashFreelancerList from "../components/clients/DashFreelancerList";
 import DashClientsList from "../components/freelancer/DashClientsList";
 import FreelancerDashComponent from "../components/freelancer/FreelancerDashComponent";
 import ClientDashComponent from "../components/clients/ClientDashComponent";
+import DashFreelancerVideo from "../components/freelancer/DashFreelancerVideo";
+import DashClientVideo from "../components/clients/DashClientVideo";
 
 function Dashboard() {
   const { currentUser } = useSelector((state) => state.user);
@@ -20,15 +22,16 @@ function Dashboard() {
     setTab(urlTab);
   }, [path.search]);
   return (
-    <div className="flex">
-      <div>
+    <div className="flex flex-col lg:flex-row min-h-screen items-center lg:items-start">
+      <div className="">
         <DashSidebar />
       </div>
-      <div className="flex flex-col w-full">
+      <div className="w-full space-y-8 p-6 bg-gray-100 min-h-screen">
         {tab === "profile" && <DashProfile />}
         {currentUser?.role === "freelancer" && (
           <>
             {tab === "video-upload" && <DashUploadVideo />}
+            {tab === "videos" && <DashFreelancerVideo />}
             {tab === "clients" && <DashClientsList />}
             {!tab && <FreelancerDashComponent />}
           </>
@@ -36,6 +39,7 @@ function Dashboard() {
 
         {currentUser?.role === "client" && (
           <>
+            {tab === "videos" && <DashClientVideo />}
             {tab === "review-videos" && <DashReviewVideos />}
             {tab === "freelancers" && <DashFreelancerList />}
 

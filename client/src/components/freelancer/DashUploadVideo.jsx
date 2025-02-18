@@ -62,11 +62,11 @@ function DashUploadVideo() {
   }, [video]);
 
   useEffect(() => {
-    if (searchQuery.length === 0) {
-      setClientsSuggestions([]);
-      return;
-    }
     const delayDebounce = setTimeout(async () => {
+      if (searchQuery.length === 0) {
+        setClientsSuggestions([]);
+        return;
+      }
       try {
         const res = await fetch(
           `/server/user/fetch-clients?search=${searchQuery}`
@@ -84,7 +84,7 @@ function DashUploadVideo() {
       } catch (error) {
         console.log(error.message);
       }
-    }, 300);
+    }, 100);
     // fetchClients(searchQuery);
     return () => clearTimeout(delayDebounce);
   }, [searchQuery]);
@@ -96,9 +96,9 @@ function DashUploadVideo() {
   };
   const handleClientChange = async (event) => {
     // console.log(event.target.value);
+    setSelectedClient(false);
     setSearchQuery(event.target.value);
     // setClientQuery(event.target.value);
-    setSelectedClient(false);
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -189,7 +189,7 @@ function DashUploadVideo() {
                 and drop
               </p>
               <p className="text-xs text-gray-500 ">
-                SVG, PNG, JPG, or GIF (MAX. 800x400px)
+                Mp4, MKV, or GIF (MAX. 800x400px)
               </p>
             </div>
             <input

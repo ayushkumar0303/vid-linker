@@ -104,7 +104,7 @@ function DashProfile() {
   // console.log(imageURL);
   // console.log(currentUser.profilePicture);
   return (
-    <div className="p-10 flex flex-grow flex-col items-center ">
+    <div className="flex flex-grow flex-col items-center ">
       {currentUser && (
         <Card className="min-w-96">
           <h1 className="flex font-bold text-5xl justify-center pb-5">

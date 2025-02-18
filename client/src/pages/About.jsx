@@ -6,8 +6,8 @@ function About() {
   return (
     <div className="bg-white text-gray-900 min-h-screen">
       <section className="text-center py-16 px-4">
-        <h1 className="text-4xl font-bold md:text-5xl flex w-full justify-center gap-4">
-          🎥 About{" "}
+        <h1 className="text-4xl font-bold md:text-5xl flex w-full justify-center gap-4 flex-wrap">
+          🎥 About
           <div className="text-4xl font-bold flex items-center gap-1 md:text-5xl">
             Vid
             <span className="text-green-500">

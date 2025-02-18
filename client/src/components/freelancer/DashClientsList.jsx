@@ -5,10 +5,12 @@ import { useSelector } from "react-redux";
 function DashClientsList() {
   const { currentUser } = useSelector((state) => state.user);
   const [clientsList, setClientsList] = useState([]);
+  const [loading, setLoading] = useState(false);
   // console.log(freelacersList[0].populate(freelacersList[0].clientId));
   // console.log(freelacersList);
   useEffect(() => {
     const fetchClientsList = async () => {
+      setLoading(true);
       try {
         const res = await fetch(
           `/server/video/get-clients-list/${currentUser?._id}`
@@ -23,10 +25,14 @@ function DashClientsList() {
       } catch (error) {
         console.log(error.message);
       }
+      setLoading(false);
     };
     fetchClientsList();
   }, [currentUser?._id]);
 
+  if (loading) {
+    return <h1 className="text-center">Loading...</h1>;
+  }
   return (
     <div className="overflow-x-auto bg-white shadow-md rounded-lg p-6 m-6">
       <Table hoverable>

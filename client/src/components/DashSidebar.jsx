@@ -10,6 +10,7 @@ import {
   HiViewBoards,
 } from "react-icons/hi";
 import { MdRemoveRedEye } from "react-icons/md";
+import { MdOutlineVideoLibrary } from "react-icons/md";
 import { BsYoutube } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router";
@@ -47,12 +48,12 @@ function DashSidebar() {
   return (
     <Sidebar
       aria-label="Default sidebar example"
-      className="border-r-2 border-green-500 min-h-screen rounded-md"
+      className="border-2 border-y-0 border-green-500 rounded-md lg:min-h-screen"
     >
       <Sidebar.Items className="">
-        <Sidebar.ItemGroup>
+        <Sidebar.ItemGroup className="flex flex-col">
           <Link to="/dashboard">
-            <Sidebar.Item href="#" icon={HiChartPie} as={"div"} active={!tab}>
+            <Sidebar.Item icon={HiChartPie} as={"div"} active={!tab}>
               Dashboard
             </Sidebar.Item>
           </Link>
@@ -75,7 +76,6 @@ function DashSidebar() {
             <>
               <Link to="/dashboard?tab=clients">
                 <Sidebar.Item
-                  href="#"
                   icon={HiUserGroup}
                   as={"div"}
                   active={tab === "clients"}
@@ -85,7 +85,6 @@ function DashSidebar() {
               </Link>
               <Link to="/dashboard?tab=video-upload">
                 <Sidebar.Item
-                  href="#"
                   icon={HiUpload}
                   as={"div"}
                   active={tab === "video-upload"}
@@ -99,7 +98,6 @@ function DashSidebar() {
             <>
               <Link to="/dashboard?tab=freelancers">
                 <Sidebar.Item
-                  href="#"
                   icon={HiUserGroup}
                   as={"div"}
                   active={tab === "freelancers"}
@@ -109,7 +107,6 @@ function DashSidebar() {
               </Link>
               <Link to="/dashboard?tab=review-videos">
                 <Sidebar.Item
-                  href="#"
                   icon={MdRemoveRedEye}
                   as={"div"}
                   active={tab === "review-videos"}
@@ -119,6 +116,15 @@ function DashSidebar() {
               </Link>
             </>
           )}
+          <Link to="/dashboard?tab=videos">
+            <Sidebar.Item
+              icon={MdOutlineVideoLibrary}
+              as={"div"}
+              active={tab === "videos"}
+            >
+              Videos
+            </Sidebar.Item>
+          </Link>
           <Sidebar.Item
             icon={HiArrowSmRight}
             className="cursor-pointer"
