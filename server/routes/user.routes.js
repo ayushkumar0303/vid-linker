@@ -1,5 +1,5 @@
 import express from "express";
-import testUser, {
+import {
   accessTokenCheck,
   getUser,
   signOut,
@@ -11,7 +11,7 @@ import verifyToken from "../utils/verifyToken.js";
 
 const userRouter = express.Router();
 
-userRouter.get("/test", testUser);
+// userRouter.get("/test", testUser);
 userRouter.delete("/delete/:userId", verifyToken, deleteUser);
 userRouter.get("/access-token-check", accessTokenCheck);
 userRouter.get("/get-user/:userId", verifyToken, getUser);

@@ -24,6 +24,7 @@ function DashProfile() {
   const username = useRef();
   const password = useRef();
   const email = useRef();
+  const newPassword = useRef();
   const dispatch = useDispatch();
   // console.log(imageURL);
 
@@ -44,6 +45,7 @@ function DashProfile() {
           username: username.current.value,
           email: email.current.value,
           password: password.current.value,
+          newPassword: newPassword.current.value,
         }),
       });
 
@@ -115,7 +117,7 @@ function DashProfile() {
             <div className="flex justify-center relative min-h-24 ">
               <img
                 src={currentUser.profilePicture}
-                className="rounded-full h-24 w-24 object-cover"
+                className="rounded-full h-24 w-24 object-cover border-2"
                 alt="Profile Picture"
               />
             </div>
@@ -143,8 +145,14 @@ function DashProfile() {
               type="password"
               ref={password}
               id="password"
-              placeholder="Enter password (Old or New if want to change)"
+              placeholder="Password"
               required
+            />
+            <TextInput
+              type="newPassword"
+              ref={newPassword}
+              id="newPassword"
+              placeholder="New password (optional)"
             />
 
             {/* Submit Button */}

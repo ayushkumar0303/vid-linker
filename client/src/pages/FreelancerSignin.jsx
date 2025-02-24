@@ -24,6 +24,7 @@ function FreelancerSignin() {
     const auth = getAuth(app);
     // console.log(auth);
     const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: "select_account" });
     try {
       const result = await signInWithPopup(auth, provider);
       // console.log(result);

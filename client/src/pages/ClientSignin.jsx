@@ -23,7 +23,10 @@ function ClientSignin() {
     event.preventDefault();
     const auth = getAuth(app);
     // console.log(auth);
-    const provider = new GoogleAuthProvider();
+    const provider = new GoogleAuthProvider().setCustomParameters({
+      prompt: "select_account",
+    });
+
     try {
       const result = await signInWithPopup(auth, provider);
       // console.log(result);

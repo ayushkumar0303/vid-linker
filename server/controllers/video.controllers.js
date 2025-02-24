@@ -146,28 +146,10 @@ export const getFreelancersList = async (req, res, next) => {
     );
     // console.log(freelancersList);
     // console.log(videos);
-    const freelancerCount = freelancersList.length;
-    const now = new Date();
-
-    const oneMonthAgoDate = new Date(
-      now.getFullYear(),
-      now.getMonth() - 1,
-      now.getDate()
-    );
-    // console.log(oneMonthAgoDate);
-    const oneMonthAgoFreelancers = await User.find({
-      _id: { $in: distinctFreelancers },
-      createAt: { $gte: oneMonthAgoDate },
-    });
-
-    const oneMonthAgoFreelancerCount = oneMonthAgoFreelancers.length;
 
     // console.log(freelancersList);
     return res.status(200).json({
       freelancersList,
-      freelancerCount,
-      oneMonthAgoFreelancers,
-      oneMonthAgoFreelancerCount,
     });
   } catch (error) {
     return next(error);
@@ -199,28 +181,9 @@ export const getClientsList = async (req, res, next) => {
 
     // console.log(videos);
 
-    const totalClients = clientList.length;
-    const now = new Date();
-
-    const oneMonthAgoDate = new Date(
-      now.getFullYear(),
-      now.getMonth() - 1,
-      now.getDate()
-    );
-
-    const oneMonthAgoClients = await User.find({
-      _id: {
-        $in: distinctClients,
-      },
-      createdAt: { $gte: oneMonthAgoDate },
-    });
-    const oneMonthAgoClientsTotal = oneMonthAgoClients.length;
     // console.log(clientList);
     return res.status(200).json({
       clientList,
-      oneMonthAgoClients,
-      totalClients,
-      oneMonthAgoClientsTotal,
     });
   } catch (error) {
     return next(error);

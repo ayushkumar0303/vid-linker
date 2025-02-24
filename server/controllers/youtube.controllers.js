@@ -12,8 +12,10 @@ export const youtubeConnect = async (req, res) => {
   const url = oauth2Client.generateAuthUrl({
     access_type: "offline",
     prompt: "consent",
-    scope: "https://www.googleapis.com/auth/youtube.upload",
-    // "https://www.googleapis.com/auth/youtube.readonly",
+    scope: [
+      "https://www.googleapis.com/auth/youtube.upload",
+      "https://www.googleapis.com/auth/youtube.readonly",
+    ],
 
     // state: JSON.stringify({ videoId, username }), // Store User ID in state
     state: videoId,
@@ -24,7 +26,7 @@ export const youtubeConnect = async (req, res) => {
   res.redirect(url);
 };
 
-export const youtubeCallback = async (req, res) => {
+export const youtubeCallback = async (req, res, next) => {
   // console.log("inside youtube callback");
 
   // console.log(req.query);
@@ -38,25 +40,43 @@ export const youtubeCallback = async (req, res) => {
   if (!code || !state)
     return res.status(400).json({ message: "Missing parameters" });
 
-  try {
-    // Exchange code for tokens
-    const { tokens } = await oauth2Client.getToken(code);
-    const authToken = jwt.sign(tokens, process.env.JWT_SECRET, {
-      expiresIn: "10m",
-    });
-    // console.log(authToken);
-    // console.log(tokens);
+  // Exchange code for tokens
+  const { tokens } = await oauth2Client.getToken(code);
+  const authToken = jwt.sign(tokens, process.env.JWT_SECRET, {
+    expiresIn: "10m",
+  });
+  // console.log(authToken);
+  // console.log(tokens);
 
-    res.cookie("auth_token", authToken, {
-      httpOnly: true,
+  res.cookie("auth_token", authToken, {
+    httpOnly: true,
+  });
+
+  oauth2Client.setCredentials(tokens);
+
+  const youtube = google.youtube({ version: "v3", auth: oauth2Client });
+
+  // console.log(youtube.channels);
+
+  try {
+    const response = await youtube.channels.list({
+      part: "snippet",
+      mine: true,
     });
+
+    const channelName = response.data.items[0].snippet.customUrl;
+
+    // console.log(channelName);
     // res.redirect(`http://localhost:5173/dashboard`);
 
     // // const { password: _pass, ...rest } = user._doc;
-    res.redirect(`http://localhost:5173/upload/${state}`);
+    res.redirect(`http://localhost:5173/upload/${state}/${channelName}`);
   } catch (error) {
     // console.error(error);
-    res.status(500).json({ message: "YouTube OAuth failed", error });
+    res.status(400).json({
+      message: "Youtube auth failed",
+      error,
+    });
   }
 };
 
@@ -64,8 +84,8 @@ export const youtubeUpload = async (req, res, next) => {
   // console.log("youtubeUplaod");
   const { videoId } = req.query;
   const { id } = req.user;
-  console.log(videoId);
-  console.log(id);
+  // console.log(videoId);
+  // console.log(id);
   const tempFilePath = "./tempVideoForYoutube.mp4";
   if (req.user.id !== req.params.userId) {
     return next(errorHandler(401, "You are not allowed to upload this video"));
@@ -95,7 +115,7 @@ export const youtubeUpload = async (req, res, next) => {
       clientId: id,
     });
 
-    const { videoTitle, videoDiscription, videoUrl } = videoToUpload;
+    const { videoTitle, videoDescription, videoUrl } = videoToUpload;
     const resUrl = await fetch(videoUrl);
     if (!resUrl.ok) {
       return res.status(400).json({ message: "Failed to download file" });
@@ -108,7 +128,7 @@ export const youtubeUpload = async (req, res, next) => {
       requestBody: {
         snippet: {
           title: videoTitle,
-          description: videoDiscription,
+          description: videoDescription,
         },
         status: {
           privacyStatus: "private",

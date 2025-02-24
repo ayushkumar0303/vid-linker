@@ -77,7 +77,7 @@ function Header() {
                   inline
                   arrowIcon={false}
                   label={
-                    <Avatar img={currentUser.profilePicture} rounded>
+                    <Avatar img={currentUser.profilePicture} rounded bordered>
                       <div className="space-y-1 font-medium ">
                         <div>{currentUser.name.split(" ")[0]}</div>
                         <div className="text-sm text-gray-500 ">

@@ -19,6 +19,7 @@ import FreelancerSignin from "./pages/FreelancerSignin.jsx";
 import ClientSignin from "./pages/ClientSignin.jsx";
 import ClientSignup from "./pages/ClientSignup.jsx";
 import FreelancerSignup from "./pages/FreelancerSignup.jsx";
+import VideoApprove from "./components/clients/VideoApprove.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -36,7 +37,11 @@ createRoot(document.getElementById("root")).render(
             {/* <Route index element={<DashComponent />} /> */}
 
             <Route path="reject/:videoId" element={<VideoReject />} />
-            <Route path="upload/:videoId" element={<UploadVideo />} />
+            <Route path="approve/:videoId" element={<VideoApprove />} />
+            <Route
+              path="upload/:videoId/:channelName"
+              element={<UploadVideo />}
+            />
             {/* <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} /> */}
           </Route>

@@ -26,7 +26,7 @@ function Dashboard() {
       <div className="">
         <DashSidebar />
       </div>
-      <div className="w-full space-y-8 p-6 bg-gray-100 min-h-screen">
+      <div className="w-full space-y-8 p-6 bg-gray-100 lg:min-h-screen">
         {tab === "profile" && <DashProfile />}
         {currentUser?.role === "freelancer" && (
           <>

@@ -41,7 +41,7 @@ function AuthPage() {
           <div className="flex justify-center gap-4 mb-4">
             <Link to="/auth?tab=client-signin">
               <button
-                className={`py-2 px-4 rounded-full border-2 border-green-500 shadow-md hover:bg-green-200 hover:text-gray-800 ${
+                className={`py-2 px-4 rounded-full border-2 border-green-500 shadow-lg hover:bg-green-200 hover:text-gray-800 ${
                   tab?.includes("client")
                     ? "bg-green-500 text-white hover:bg-green-500 hover:text-white"
                     : ""
@@ -53,7 +53,7 @@ function AuthPage() {
 
             <Link to="/auth?tab=freelancer-signin">
               <button
-                className={` py-2 px-4 rounded-full border-2 border-green-500  hover:bg-green-200 hover:text-gray-800 shadow-md ${
+                className={` py-2 px-4 rounded-full border-2 border-green-500  hover:bg-green-200 hover:text-gray-800 shadow-lg ${
                   tab?.includes("freelancer")
                     ? "bg-green-500 text-white hover:bg-green-500 hover:text-white"
                     : ""

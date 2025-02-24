@@ -1,4 +1,4 @@
-import { Table } from "flowbite-react";
+import { Spinner, Table } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -31,59 +31,66 @@ function DashFreelancerList() {
   }, [currentUser?._id]);
 
   if (loading) {
-    return <h1 className="text-center">Loading...</h1>;
+    return (
+      <p className="text-center">
+        <Spinner color="success" aria-label="Success spinner example" />
+      </p>
+    );
   }
   return (
-    <div className="overflow-x-auto shadow-md rounded-lg p-6 m-6 bg-white">
-      <Table hoverable>
-        <Table.Head>
-          <Table.HeadCell>Date</Table.HeadCell>
-          <Table.HeadCell>Freelancer User ID</Table.HeadCell>
-          <Table.HeadCell>Profile Picture</Table.HeadCell>
-          <Table.HeadCell>Name</Table.HeadCell>
-          <Table.HeadCell>Email</Table.HeadCell>
-        </Table.Head>
-        <Table.Body className="divide-y">
-          {freelancers.length > 0 ? (
-            freelancers.map((freelancer) => (
-              <Table.Row
-                key={freelancer._id}
-                className="bg-white hover:bg-gray-100 "
-              >
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 ">
-                  {new Date(freelancer.createdAt).toLocaleDateString()}
-                </Table.Cell>
-                <Table.Cell className="text-sm text-gray-900 ">
-                  {freelancer.username}
-                </Table.Cell>
-                <Table.Cell>
-                  <img
-                    src={freelancer.profilePicture}
-                    alt={freelancer.name}
-                    className="w-10 h-10 rounded-full"
-                  />
-                </Table.Cell>
-                <Table.Cell className="text-sm text-gray-900 ">
-                  {freelancer.name}
-                </Table.Cell>
-                <Table.Cell className="text-sm text-gray-900 ">
-                  {freelancer.email}
+    <>
+      <h1 className="text-center font-bold text-4xl">Freelancer's List</h1>
+      <div className="overflow-x-auto shadow-md rounded-lg p-6 m-6 bg-white">
+        <Table hoverable>
+          <Table.Head>
+            <Table.HeadCell>Date</Table.HeadCell>
+            <Table.HeadCell>Freelancer User ID</Table.HeadCell>
+            <Table.HeadCell>Profile Picture</Table.HeadCell>
+            <Table.HeadCell>Name</Table.HeadCell>
+            <Table.HeadCell>Email</Table.HeadCell>
+          </Table.Head>
+          <Table.Body className="divide-y">
+            {freelancers.length > 0 ? (
+              freelancers.map((freelancer) => (
+                <Table.Row
+                  key={freelancer._id}
+                  className="bg-white hover:bg-gray-100 "
+                >
+                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 ">
+                    {new Date(freelancer.createdAt).toLocaleDateString()}
+                  </Table.Cell>
+                  <Table.Cell className="text-sm text-gray-900 ">
+                    {freelancer.username}
+                  </Table.Cell>
+                  <Table.Cell>
+                    <img
+                      src={freelancer.profilePicture}
+                      alt={freelancer.name}
+                      className="w-10 h-10 rounded-full"
+                    />
+                  </Table.Cell>
+                  <Table.Cell className="text-sm text-gray-900 ">
+                    {freelancer.name}
+                  </Table.Cell>
+                  <Table.Cell className="text-sm text-gray-900 ">
+                    {freelancer.email}
+                  </Table.Cell>
+                </Table.Row>
+              ))
+            ) : (
+              <Table.Row>
+                <Table.Cell
+                  colSpan="5"
+                  className="text-center text-gray-500 py-4"
+                >
+                  No freelancers available
                 </Table.Cell>
               </Table.Row>
-            ))
-          ) : (
-            <Table.Row>
-              <Table.Cell
-                colSpan="5"
-                className="text-center text-gray-500 py-4"
-              >
-                No freelancers available
-              </Table.Cell>
-            </Table.Row>
-          )}
-        </Table.Body>
-      </Table>
-    </div>
+            )}
+          </Table.Body>
+        </Table>
+      </div>
+    </>
   );
 }
 

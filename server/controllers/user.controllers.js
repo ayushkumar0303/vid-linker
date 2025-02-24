@@ -2,10 +2,11 @@ import User from "../models/user.models.js";
 import errorHandler from "../utils/error.js";
 import bcryptjs from "bcryptjs";
 
-const testUser = (req, res) => {
-  // console.log("testing is successful");
-  res.json({ message: "testing is successful" });
-};
+// const testUser = (req, res) => {
+//   // console.log("testing is successful");
+//   res.json({ message: "testing is successful" });
+// };
+
 export const getUser = async (req, res, next) => {
   // console.log(req.user.id);
   // console.log(req.params.userId);
@@ -29,17 +30,33 @@ export const getUser = async (req, res, next) => {
   }
 };
 export const updateUser = async (req, res, next) => {
-  let { username, email, password } = req.body;
+  let { username, email, password, newPassword } = req.body;
+  console.log(password);
+  console.log(newPassword);
+  if (!password || password === "") {
+    return next(errorHandler(404, "Password is required for the update user"));
+  }
   // console.log(req.params.userId);
   if (req.user.id !== req.params.userId) {
     return next(errorHandler(401, "You are not allowed to update this user"));
   }
-  if (password) {
-    if (password.length < 6) {
+
+  try {
+    const validUser = await User.findOne({ email });
+    const validPassword = bcryptjs.compareSync(password, validUser.password);
+    if (!validPassword) {
+      return next(errorHandler(401, "Invalid Password"));
+    }
+  } catch (error) {
+    return next(error);
+  }
+
+  if (newPassword) {
+    if (newPassword.length < 6) {
       return next(errorHandler(400, "Password must be at least 6 characters"));
     }
 
-    password = bcryptjs.hashSync(password, 10);
+    newPassword = bcryptjs.hashSync(newPassword, 10);
   }
 
   if (username) {
@@ -72,7 +89,7 @@ export const updateUser = async (req, res, next) => {
         $set: {
           username,
           email,
-          password,
+          password: newPassword,
         },
       },
       { new: true }
@@ -109,8 +126,6 @@ export const updateUser = async (req, res, next) => {
 //     return next(error);
 //   }
 // };
-
-export default testUser;
 
 export const signOut = async (req, res, next) => {
   try {
@@ -169,3 +184,4 @@ export const deleteUser = async (req, res, next) => {
     next(error);
   }
 };
+// export default testUser;
