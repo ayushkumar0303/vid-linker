@@ -182,7 +182,7 @@ function ClientDashComponent() {
                           className="hover:bg-gray-100"
                         >
                           <Table.Cell className="p-3">
-                            {video.clientId.username}
+                            {video.clientId?.username || "anonymous"}
                           </Table.Cell>
                           <Table.Cell className="p-3">
                             <video

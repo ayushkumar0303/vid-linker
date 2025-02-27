@@ -80,6 +80,7 @@ export const getVideosForFreelancer = async (req, res, next) => {
 };
 export const setVideoMetaData = async (req, res, next) => {
   const { title, description } = req.body;
+  // console.log(req.params.videoId);
   if (req.user.id !== req.params.userId) {
     return next(
       errorHandler(
@@ -102,6 +103,8 @@ export const setVideoMetaData = async (req, res, next) => {
       },
       { new: true }
     );
+
+    // console.log(video);
     if (!video) {
       return next(errorHandler(404, "Video not found"));
     }

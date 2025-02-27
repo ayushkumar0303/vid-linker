@@ -46,10 +46,7 @@ function DashSidebar() {
     }
   };
   return (
-    <Sidebar
-      aria-label="Default sidebar example"
-      className="border-2 border-y-0 border-green-500 rounded-md lg:min-h-screen"
-    >
+    <Sidebar aria-label="Default sidebar example" className="">
       <Sidebar.Items className="">
         <Sidebar.ItemGroup className="flex flex-col">
           <Link to="/dashboard">

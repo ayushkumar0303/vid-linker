@@ -1,4 +1,4 @@
-import { Button, TextInput, Textarea } from "flowbite-react";
+import { Alert, Button, TextInput, Textarea } from "flowbite-react";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
@@ -8,6 +8,7 @@ function UploadVideo() {
   const { videoId, channelName } = useParams();
   const { currentUser } = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
@@ -15,6 +16,7 @@ function UploadVideo() {
 
   const handleUpload = async () => {
     setLoading(true);
+    setError(null);
     try {
       const res = await fetch(
         `/server/youtube/upload/${currentUser?._id}?videoId=${videoId}`
@@ -23,11 +25,12 @@ function UploadVideo() {
       // console.log(data);
       if (res.ok) {
         navigate("/dashboard");
+        setError(null);
       } else {
-        console.log(data);
+        setError(data.message);
       }
     } catch (error) {
-      console.log(error.message);
+      setError(error.message);
     }
     setLoading(false);
   };
@@ -52,6 +55,11 @@ function UploadVideo() {
           {loading ? "Uploading Video" : "Upload Video"}
         </Button>
       </div>
+      {error && (
+        <Alert className="mt-2" color="failure">
+          {error}
+        </Alert>
+      )}
     </div>
   );
 }

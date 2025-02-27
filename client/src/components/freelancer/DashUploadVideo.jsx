@@ -1,12 +1,4 @@
-import {
-  Button,
-  FileInput,
-  Label,
-  List,
-  Select,
-  Spinner,
-  TextInput,
-} from "flowbite-react";
+import { Alert, Button, Label, List, Spinner, TextInput } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -24,6 +16,7 @@ function DashUploadVideo() {
   const [searchQuery, setSearchQuery] = useState("");
   const [clientFound, setClientFound] = useState(true);
   const [clientsSuggestions, setClientsSuggestions] = useState([]);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   // console.log(formData);
   // console.log(clientsSuggestions);
@@ -40,6 +33,7 @@ function DashUploadVideo() {
   const uploadFile = async () => {
     try {
       setVideoLoading(true);
+      setError(null);
       const res = await storage.createFile(
         "679e19a3001ccb5a563f",
         ID.unique(),
@@ -52,7 +46,7 @@ function DashUploadVideo() {
         setVideoPreviewUrl(result.href);
       }
     } catch (error) {
-      console.log(error.message);
+      setError(error.message);
     }
     setVideoLoading(false);
   };
@@ -104,6 +98,7 @@ function DashUploadVideo() {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setError(null);
     setVideoUploadLoading(true);
     try {
       const res = await fetch(`/server/video/upload-video/${currentUser._id}`, {
@@ -118,10 +113,10 @@ function DashUploadVideo() {
       if (res.ok) {
         navigate("/dashboard");
       } else {
-        console.log(data);
+        setError(data.message);
       }
     } catch (error) {
-      console.log(error.message);
+      setError(error.message);
     }
     setVideoUploadLoading(false);
   };
@@ -233,6 +228,11 @@ function DashUploadVideo() {
             </Button>
           </div>
         </form>
+        {error && (
+          <Alert className="mt-2" color="failure">
+            {error}
+          </Alert>
+        )}
       </div>
     </>
   );

@@ -178,7 +178,9 @@ function FreelancerDashComponent() {
                     {videos.videos?.length > 0 ? (
                       videos.videos.map((video) => (
                         <Table.Row key={video._id} className="bg-white ">
-                          <Table.Cell>{video.freelancerId.username}</Table.Cell>
+                          <Table.Cell>
+                            {video.freelancerId?.username || "anonymous"}
+                          </Table.Cell>
                           <Table.Cell>
                             <video
                               controls

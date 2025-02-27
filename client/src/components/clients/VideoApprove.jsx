@@ -1,4 +1,4 @@
-import { Button, TextInput, Textarea } from "flowbite-react";
+import { Alert, Button, TextInput, Textarea } from "flowbite-react";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
@@ -8,6 +8,7 @@ function VideoApprove() {
   const { currentUser } = useSelector((state) => state.user);
   const [isMetadataSubmitted, setIsMetadataSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
@@ -15,6 +16,8 @@ function VideoApprove() {
   // console.log(params);
   const handleFormSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
+    setError(null);
     try {
       const res = await fetch(
         `/server/video/set-meta-data/${currentUser?._id}/${videoId}`,
@@ -30,12 +33,14 @@ function VideoApprove() {
       if (res.ok) {
         // navigate("/upload");
         setIsMetadataSubmitted(true);
+        setError(null);
       } else {
-        console.log(data);
+        setError(data.message);
       }
     } catch (error) {
-      console.log(error.message);
+      setError(error.message);
     }
+    setLoading(false);
   };
   // const handleUpload = async () => {
   //   setLoading(true);
@@ -81,22 +86,27 @@ function VideoApprove() {
             placeholder="Video Description"
             required
             rows={4}
-            className="w-full border-gray-300 focus:border-green-500"
+            className="w-full border-gray-300 focus:border-green-500 resize-none"
             onChange={(e) =>
               setFormData({ ...formData, description: e.target.value })
             }
           />
           {/* Submit Button */}
           <Button
-            disabled={isMetadataSubmitted}
+            disabled={isMetadataSubmitted || loading}
             type="submit"
             outline
             gradientMonochrome="success"
           >
-            Submit Metadata
+            {loading ? "Loading..." : "Submit Metadata"}
           </Button>
         </form>
-        {isMetadataSubmitted && (
+        {isMetadataSubmitted && !error && (
+          <Alert className="mt-3" color="success">
+            Meta data set successfully
+          </Alert>
+        )}
+        {isMetadataSubmitted && !error && (
           <Button
             href={`/server/youtube/connect/${currentUser?._id}?videoId=${videoId}`}
             gradientMonochrome="lime"
@@ -104,6 +114,11 @@ function VideoApprove() {
           >
             Link your youtube account
           </Button>
+        )}
+        {error && (
+          <Alert className="mt-2" color="failure">
+            {error}
+          </Alert>
         )}
       </div>
     </div>

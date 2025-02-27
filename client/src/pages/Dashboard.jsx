@@ -23,7 +23,7 @@ function Dashboard() {
   }, [path.search]);
   return (
     <div className="flex flex-col lg:flex-row min-h-screen items-center lg:items-start">
-      <div className="">
+      <div className="border-2 border-t-0  border-green-500">
         <DashSidebar />
       </div>
       <div className="w-full space-y-8 p-6 bg-gray-100 lg:min-h-screen">

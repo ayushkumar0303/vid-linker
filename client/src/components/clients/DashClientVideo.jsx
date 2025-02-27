@@ -81,50 +81,47 @@ function DashClientVideo() {
           </Table.Head>
           <Table.Body className="divide-y">
             {videos.length > 0 ? (
-              videos.map(
-                (video) =>
-                  video?.freelancerId && (
-                    <Table.Row key={video._id} className="hover:bg-gray-100">
-                      <Table.Cell className="p-3">
-                        {new Date(video.createdAt).toLocaleDateString()}
-                      </Table.Cell>
-                      <Table.Cell className="p-3">
-                        {new Date(video.createdAt).toLocaleTimeString()}
-                      </Table.Cell>
-                      <Table.Cell className="p-3">
-                        <video
-                          controls
-                          className="min-w-32 h-32 w-44 rounded-md border"
-                        >
-                          <source src={video.videoUrl} />
-                          Error loading video
-                        </video>
-                      </Table.Cell>
-                      <Table.Cell className="p-3">
-                        {video.freelancerId.username}
-                      </Table.Cell>
+              videos.map((video) => (
+                <Table.Row key={video._id} className="hover:bg-gray-100">
+                  <Table.Cell className="p-3">
+                    {new Date(video.createdAt).toLocaleDateString()}
+                  </Table.Cell>
+                  <Table.Cell className="p-3">
+                    {new Date(video.createdAt).toLocaleTimeString()}
+                  </Table.Cell>
+                  <Table.Cell className="p-3">
+                    <video
+                      controls
+                      className="min-w-32 h-32 w-44 rounded-md border"
+                    >
+                      <source src={video.videoUrl} />
+                      Error loading video
+                    </video>
+                  </Table.Cell>
+                  <Table.Cell className="p-3">
+                    {video.freelancerId?.username || "anonymous"}
+                  </Table.Cell>
 
-                      <Table.Cell className="p-3">
-                        <span
-                          className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                            video.videoStatus === "Approved"
-                              ? "bg-green-100 text-green-600"
-                              : video.videoStatus === "Pending"
-                              ? "bg-yellow-100 text-yellow-600"
-                              : "bg-red-100 text-red-600"
-                          }`}
-                        >
-                          {video.videoStatus}
-                        </span>
-                      </Table.Cell>
-                      {video.videoStatus === "Rejected" && (
-                        <Table.Cell className="p-3 max-w-10">
-                          <span>{video.videoRejectMessage}</span>
-                        </Table.Cell>
-                      )}
-                    </Table.Row>
-                  )
-              )
+                  <Table.Cell className="p-3">
+                    <span
+                      className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                        video.videoStatus === "Approved"
+                          ? "bg-green-100 text-green-600"
+                          : video.videoStatus === "Pending"
+                          ? "bg-yellow-100 text-yellow-600"
+                          : "bg-red-100 text-red-600"
+                      }`}
+                    >
+                      {video.videoStatus}
+                    </span>
+                  </Table.Cell>
+                  {video.videoStatus === "Rejected" && (
+                    <Table.Cell className="p-3 max-w-10">
+                      <span>{video.videoRejectMessage}</span>
+                    </Table.Cell>
+                  )}
+                </Table.Row>
+              ))
             ) : (
               <Table.Row>
                 <Table.Cell
