@@ -4,8 +4,10 @@ import { useSelector } from "react-redux";
 
 function DashClientVideo() {
   const { currentUser } = useSelector((state) => state.user);
-  const [videos, setVideos] = useState({});
+  const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [seeMore, setSeeMore] = useState(true);
+  // console.log(videos);
   useEffect(() => {
     const fetchVideos = async () => {
       try {
@@ -14,9 +16,14 @@ function DashClientVideo() {
           `/server/video/get-review-videos/${currentUser?._id}`
         );
         const data = await res.json();
-        console.log(data);
+        // console.log(data);
         if (res.ok) {
           setVideos(data.videos);
+          if (data.videos.length < 5) {
+            setSeeMore(false);
+          } else {
+            setSeeMore(true);
+          }
         } else {
           console.log(data.message);
         }
@@ -27,6 +34,30 @@ function DashClientVideo() {
     };
     fetchVideos();
   }, [currentUser?._id]);
+
+  const handleSeeMore = async () => {
+    const startIndex = videos.length;
+    try {
+      const res = await fetch(
+        `/server/video/get-review-videos/${currentUser?._id}?startIndex=${startIndex}`
+      );
+
+      const data = await res.json();
+      // console.log(data);
+      if (res.ok) {
+        setVideos([...videos, ...data.videos]);
+        if (data.videos.length < 5) {
+          setSeeMore(false);
+        } else {
+          setSeeMore(true);
+        }
+      } else {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   if (loading) {
     return (
       <p className="text-center">
@@ -35,8 +66,9 @@ function DashClientVideo() {
     );
   }
   return (
-    <>
+    <div>
       <h1 className="text-center font-bold text-4xl">Client's Videos</h1>
+
       <div className="overflow-x-auto bg-white shadow-md rounded-lg p-6 m-6">
         <Table hoverable>
           <Table.Head>
@@ -45,12 +77,13 @@ function DashClientVideo() {
             <Table.HeadCell>Video</Table.HeadCell>
             <Table.HeadCell>FreelancerId User ID</Table.HeadCell>
             <Table.HeadCell>Status</Table.HeadCell>
+            <Table.HeadCell>Reject Message</Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
             {videos.length > 0 ? (
               videos.map(
                 (video) =>
-                  video.freelancerId && (
+                  video?.freelancerId && (
                     <Table.Row key={video._id} className="hover:bg-gray-100">
                       <Table.Cell className="p-3">
                         {new Date(video.createdAt).toLocaleDateString()}
@@ -84,13 +117,18 @@ function DashClientVideo() {
                           {video.videoStatus}
                         </span>
                       </Table.Cell>
+                      {video.videoStatus === "Rejected" && (
+                        <Table.Cell className="p-3 max-w-10">
+                          <span>{video.videoRejectMessage}</span>
+                        </Table.Cell>
+                      )}
                     </Table.Row>
                   )
               )
             ) : (
               <Table.Row>
                 <Table.Cell
-                  colSpan="5"
+                  colSpan="6"
                   className="text-center text-gray-500 py-4"
                 >
                   No Videos
@@ -100,7 +138,15 @@ function DashClientVideo() {
           </Table.Body>
         </Table>
       </div>
-    </>
+      {seeMore && (
+        <p
+          className="text-center text-green-500 cursor-pointer "
+          onClick={handleSeeMore}
+        >
+          See more
+        </p>
+      )}
+    </div>
   );
 }
 

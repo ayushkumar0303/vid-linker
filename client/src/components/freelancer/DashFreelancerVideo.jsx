@@ -4,8 +4,10 @@ import { useSelector } from "react-redux";
 
 function DashFreelancerVideo() {
   const { currentUser } = useSelector((state) => state.user);
-  const [videos, setVideos] = useState({});
+  const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [seeMore, setSeeMore] = useState(true);
+
   useEffect(() => {
     const fetchVideos = async () => {
       try {
@@ -15,6 +17,11 @@ function DashFreelancerVideo() {
         // console.log(data);
         if (res.ok) {
           setVideos(data.videos);
+          if (data.videos.length < 5) {
+            setSeeMore(false);
+          } else {
+            setSeeMore(true);
+          }
         } else {
           console.log(data.message);
         }
@@ -25,6 +32,31 @@ function DashFreelancerVideo() {
     };
     fetchVideos();
   }, [currentUser?._id]);
+
+  const handleSeeMore = async () => {
+    const startIndex = videos.length;
+    try {
+      const res = await fetch(
+        `/server/video/get-videos/${currentUser?._id}?startIndex=${startIndex}`
+      );
+
+      const data = await res.json();
+      // console.log(data);
+      if (res.ok) {
+        setVideos([...videos, ...data.videos]);
+        if (data.videos.length < 5) {
+          setSeeMore(false);
+        } else {
+          setSeeMore(true);
+        }
+      } else {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   if (loading) {
     return (
       <p className="text-center">
@@ -33,7 +65,7 @@ function DashFreelancerVideo() {
     );
   }
   return (
-    <>
+    <div>
       <h1 className="text-center font-bold text-5xl">Videos send for Review</h1>
       <div className="overflow-x-auto bg-white shadow-md rounded-lg p-6 m-6">
         <Table hoverable>
@@ -43,6 +75,7 @@ function DashFreelancerVideo() {
             <Table.HeadCell>Video</Table.HeadCell>
             <Table.HeadCell>Client User ID</Table.HeadCell>
             <Table.HeadCell>Status</Table.HeadCell>
+            <Table.HeadCell>Reject Message</Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
             {videos.length > 0 ? (
@@ -82,6 +115,11 @@ function DashFreelancerVideo() {
                           {video.videoStatus}
                         </span>
                       </Table.Cell>
+                      {video.videoStatus === "Rejected" && (
+                        <Table.Cell className="p-3 max-w-10">
+                          <span>{video.videoRejectMessage}</span>
+                        </Table.Cell>
+                      )}
                     </Table.Row>
                   )
               )
@@ -98,7 +136,15 @@ function DashFreelancerVideo() {
           </Table.Body>
         </Table>
       </div>
-    </>
+      {seeMore && (
+        <p
+          className="text-center text-green-500 cursor-pointer "
+          onClick={handleSeeMore}
+        >
+          See more
+        </p>
+      )}
+    </div>
   );
 }
 

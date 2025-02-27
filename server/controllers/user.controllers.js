@@ -157,7 +157,7 @@ export const fetchClients = async (req, res, next) => {
     const clients = await User.find({
       username: { $regex: `^${search}`, $options: "i" }, // Case-insensitive regex
       role: "client",
-    }).limit(5);
+    }).limit(3);
     // console.log(clients);
     if (clients.length === 0) {
       return res.status(400).json({ message: "No clients found" });

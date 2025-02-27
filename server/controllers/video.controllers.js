@@ -24,29 +24,36 @@ export const uploadVideo = async (req, res, next) => {
   }
 };
 
-export const getReviewVideos = async (req, res, next) => {
+export const getVideosForClient = async (req, res, next) => {
   // console.log("hfhfh");
   const clientId = req.user.id;
   if (req.user.id !== req.params.userId) {
     return next(errorHandler(401, "You are not authenticated"));
   }
 
+  const limit = req.query.limit || 5;
+  const startIndex = req.query.startIndex || 0;
   try {
-    const videos = await Video.find({ clientId }).populate(
-      "freelancerId",
-      "username"
-    );
+    const videos = await Video.find({ clientId })
+      .sort({ updatedAt: -1 })
+      .limit(limit)
+      .skip(startIndex)
+      .populate("freelancerId", "username");
 
-    const videosForReview = videos.filter(
-      (video) => video.videoStatus === "Pending"
-    );
-    // console.log(videosForReview);
-    return res.status(200).json({ videos, videosForReview });
+    const reviewVideos = await Video.find({ clientId, videoStatus: "Pending" })
+      .sort({ updatedAt: -1 })
+      .limit(limit)
+      .skip(startIndex)
+      .populate("freelancerId", "username");
+
+    // console.log(videos);
+    const totalVideos = await Video.countDocuments({ clientId });
+    return res.status(200).json({ videos, reviewVideos, totalVideos });
   } catch (error) {
     return next(error);
   }
 };
-export const getVideos = async (req, res, next) => {
+export const getVideosForFreelancer = async (req, res, next) => {
   // console.log("hfhfh");
   const freelancerId = req.user.id;
   // console.log("freelancerID", freelancerId);
@@ -54,15 +61,19 @@ export const getVideos = async (req, res, next) => {
     return next(errorHandler(401, "You are not authenticated"));
   }
 
+  const limit = req.query.limit || 5;
+  const startIndex = req.query.startIndex || 0;
   try {
-    const videos = await Video.find({ freelancerId }).populate(
-      "clientId",
-      "username"
-    );
+    const videos = await Video.find({ freelancerId })
+      .sort({ updatedAt: -1 })
+      .limit(limit)
+      .skip(startIndex)
+      .populate("clientId", "username");
 
     // console.log(videos);
+    const totalVideos = await Video.countDocuments({ freelancerId });
 
-    return res.status(200).json({ videos });
+    return res.status(200).json({ videos, totalVideos });
   } catch (error) {
     return next(error);
   }
@@ -109,6 +120,9 @@ export const getFreelancersList = async (req, res, next) => {
   if (req.user.id !== req.params.userId) {
     return next(errorHandler(401, "Not allowed to do this"));
   }
+
+  const limit = req.query.limit || 9;
+  const startIndex = req.query.startIndex || 0;
   try {
     // const freelancersList = await Video.aggregate([
     //   { $match: { clientId } },
@@ -138,18 +152,28 @@ export const getFreelancersList = async (req, res, next) => {
       clientId,
     });
 
+    // console.log(distinctFreelancers);
+
     const freelancersList = await User.find(
       {
         _id: { $in: distinctFreelancers },
       },
       "name username email profilePicture updatedAt createdAt"
-    );
+    )
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .skip(startIndex);
     // console.log(freelancersList);
     // console.log(videos);
 
     // console.log(freelancersList);
+    const totalFreelancers = await User.countDocuments({
+      _id: { $in: distinctFreelancers },
+    });
+
     return res.status(200).json({
       freelancersList,
+      totalFreelancers,
     });
   } catch (error) {
     return next(error);
@@ -180,12 +204,45 @@ export const getClientsList = async (req, res, next) => {
       .skip(startIndex);
 
     // console.log(videos);
+    const totalClient = await User.countDocuments({
+      _id: { $in: distinctClients },
+    });
 
     // console.log(clientList);
     return res.status(200).json({
       clientList,
+      totalClient,
     });
   } catch (error) {
     return next(error);
+  }
+};
+
+export const videoReject = async (req, res, next) => {
+  const { message } = req.body;
+
+  if (req.user.id !== req.params.userId) {
+    return next(errorHandler(401, "You are not allowed to reject this video"));
+  }
+
+  try {
+    const video = await Video.findByIdAndUpdate(
+      req.params.videoId,
+      {
+        $set: {
+          videoRejectMessage: message,
+          videoStatus: "Rejected",
+        },
+      },
+      { new: true }
+    );
+
+    if (!video) {
+      return next(errorHandler(404, "Video not found"));
+    }
+
+    return res.status(200).json({ message: "Video reject successfully" });
+  } catch (error) {
+    next(error);
   }
 };

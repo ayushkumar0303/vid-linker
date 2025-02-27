@@ -27,6 +27,9 @@ const videoSchema = new mongoose.Schema(
     videoDescription: {
       type: String,
     },
+    videoRejectMessage: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

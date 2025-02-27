@@ -8,8 +8,8 @@ import { MdOutlineVideoLibrary } from "react-icons/md";
 
 function ClientDashComponent() {
   const { currentUser } = useSelector((state) => state.user);
-  const [clients, setClients] = useState([]);
-  const [videosForReview, setVideosForReview] = useState([]);
+  const [clients, setClients] = useState({});
+  const [videosForReview, setVideosForReview] = useState({});
   const [clientsLoading, setClientsLoading] = useState(false);
   const [videoLoading, setVideoLoading] = useState(false);
 
@@ -25,7 +25,7 @@ function ClientDashComponent() {
         const data = await res.json();
         // console.log(data);
         if (res.ok) {
-          setClients(data.clientList);
+          setClients(data);
         } else {
           console.log(data.message);
         }
@@ -38,12 +38,12 @@ function ClientDashComponent() {
       setVideoLoading(true);
       try {
         const res = await fetch(
-          `/server/video/get-videos/${currentUser?._id}?limit=5`
+          `/server/video/get-videos/${currentUser?._id}?limit=3`
         );
         const data = await res.json();
-        console.log(data);
+        // console.log(data);
         if (res.ok) {
-          setVideosForReview(data.videos);
+          setVideosForReview(data);
         } else {
           console.log(data.message);
         }
@@ -65,7 +65,7 @@ function ClientDashComponent() {
           <div className="flex items-center gap-3 justify-between">
             <div>
               <p className="uppercase text-gray-500">Total Clients</p>
-              <p className="font-bold text-3xl">{clients?.length}</p>
+              <p className="font-bold text-3xl">{clients.totalClient}</p>
             </div>
             <div className="bg-blue-600 p-3 border rounded-full">
               <HiUserGroup className="text-white size-9" />
@@ -77,7 +77,9 @@ function ClientDashComponent() {
           <div className="flex items-center gap-3 justify-between">
             <div>
               <p className="uppercase text-gray-500">Total Videos</p>
-              <p className="font-bold text-3xl">{videosForReview?.length}</p>
+              <p className="font-bold text-3xl">
+                {videosForReview.totalVideos}
+              </p>
             </div>
             <div className="bg-yellow-500 p-3 border rounded-full">
               <MdOutlineVideoLibrary className="text-white size-9" />
@@ -111,8 +113,8 @@ function ClientDashComponent() {
                     <Table.HeadCell>Name</Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="divide-y">
-                    {clients?.length > 0 ? (
-                      clients.map((client) => (
+                    {clients.clientList?.length > 0 ? (
+                      clients.clientList.map((client) => (
                         <Table.Row
                           key={client._id}
                           className="hover:bg-gray-100"
@@ -173,8 +175,8 @@ function ClientDashComponent() {
                     <Table.HeadCell>Status</Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="divide-y">
-                    {videosForReview?.length > 0 ? (
-                      videosForReview.map((video) => (
+                    {videosForReview.videos?.length > 0 ? (
+                      videosForReview.videos.map((video) => (
                         <Table.Row
                           key={video._id}
                           className="hover:bg-gray-100"

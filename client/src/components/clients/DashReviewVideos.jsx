@@ -7,6 +7,7 @@ function DashReviewVideos() {
   const { currentUser } = useSelector((state) => state.user);
   const [videosForReview, setVideosForReview] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [seeMore, setSeeMore] = useState(true);
   // console.log(videosForReview);
   useEffect(() => {
     const fetchReviewVideos = async () => {
@@ -16,8 +17,14 @@ function DashReviewVideos() {
           `/server/video/get-review-videos/${currentUser?._id}`
         );
         const data = await res.json();
+        // console.log(data);
         if (res.ok) {
-          setVideosForReview(data.videosForReview);
+          setVideosForReview(data.reviewVideos);
+          if (data.reviewVideos.length < 5) {
+            setSeeMore(false);
+          } else {
+            setSeeMore(true);
+          }
         } else {
           console.log(data);
         }
@@ -29,6 +36,29 @@ function DashReviewVideos() {
     fetchReviewVideos();
   }, [currentUser?._id]);
 
+  const handleSeeMore = async () => {
+    const startIndex = videosForReview.length;
+    try {
+      const res = await fetch(
+        `/server/video/get-review-videos/${currentUser?._id}?startIndex=${startIndex}`
+      );
+
+      const data = await res.json();
+      // console.log(data);
+      if (res.ok) {
+        setVideosForReview([...videosForReview, ...data.reviewVideos]);
+        if (data.reviewVideos.length < 5) {
+          setSeeMore(false);
+        } else {
+          setSeeMore(true);
+        }
+      } else {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   if (loading) {
     return (
       <p className="text-center">
@@ -37,7 +67,7 @@ function DashReviewVideos() {
     );
   }
   return (
-    <>
+    <div>
       <h1 className="text-center font-bold text-4xl">Videos for Review</h1>
       <div className="overflow-x-auto rounded-lg shadow-md p-6 m-6 bg-white">
         <Table hoverable>
@@ -58,7 +88,7 @@ function DashReviewVideos() {
             {videosForReview.length > 0 ? (
               videosForReview.map(
                 (video) =>
-                  video.freelancerId && (
+                  video?.freelancerId && (
                     <Table.Row key={video._id} className="bg-white">
                       <Table.Cell className="whitespace-nowrap font-medium text-gray-900 ">
                         {new Date(video.updatedAt).toLocaleDateString()}
@@ -106,7 +136,15 @@ function DashReviewVideos() {
           </Table.Body>
         </Table>
       </div>
-    </>
+      {seeMore && (
+        <p
+          className="text-center text-green-500 cursor-pointer "
+          onClick={handleSeeMore}
+        >
+          See more
+        </p>
+      )}
+    </div>
   );
 }
 

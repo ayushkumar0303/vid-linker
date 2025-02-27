@@ -8,8 +8,8 @@ import { MdOutlineVideoLibrary } from "react-icons/md";
 
 function FreelancerDashComponent() {
   const { currentUser } = useSelector((state) => state.user);
-  const [freelancers, setFreelancers] = useState([]);
-  const [videos, setVideos] = useState([]);
+  const [freelancers, setFreelancers] = useState({});
+  const [videos, setVideos] = useState({});
   const [freelancersLoading, setFreelancersLoading] = useState(false);
   const [videosLoading, setVideosLoading] = useState(false);
   // console.log(freelacersList[0].populate(freelacersList[0].clientId));
@@ -19,12 +19,12 @@ function FreelancerDashComponent() {
       setFreelancersLoading(true);
       try {
         const res = await fetch(
-          `/server/video/get-freelancers-list/${currentUser?._id}`
+          `/server/video/get-freelancers-list/${currentUser?._id}?limit=5`
         );
         const data = await res.json();
-        console.log(data);
+        // console.log(data);
         if (res.ok) {
-          setFreelancers(data.freelancersList);
+          setFreelancers(data);
         } else {
           console.log(data.message);
         }
@@ -37,12 +37,12 @@ function FreelancerDashComponent() {
       setVideosLoading(true);
       try {
         const res = await fetch(
-          `/server/video/get-review-videos/${currentUser?._id}`
+          `/server/video/get-review-videos/${currentUser?._id}?limit=3`
         );
         const data = await res.json();
-        console.log(data);
+        // console.log(data);
         if (res.ok) {
-          setVideos(data.videos);
+          setVideos(data);
         } else {
           console.log(data.message);
         }
@@ -64,7 +64,9 @@ function FreelancerDashComponent() {
           <div className="flex items-center gap-3 justify-between">
             <div>
               <p className="uppercase text-gray-500">Total Freelancers</p>
-              <p className="font-bold text-3xl">{freelancers.length}</p>
+              <p className="font-bold text-3xl">
+                {freelancers.totalFreelancers}
+              </p>
             </div>
             <div className="bg-blue-600 p-3 border rounded-full">
               <HiUserGroup className="text-white size-9" />
@@ -76,7 +78,7 @@ function FreelancerDashComponent() {
           <div className="flex items-center gap-3 justify-between">
             <div>
               <p className="uppercase text-gray-500">Total Videos</p>
-              <p className="font-bold text-3xl">{videos.length}</p>
+              <p className="font-bold text-3xl">{videos.totalVideos}</p>
             </div>
             <div className="bg-yellow-500 p-3 border rounded-full">
               <MdOutlineVideoLibrary className="text-white size-9" />
@@ -113,8 +115,8 @@ function FreelancerDashComponent() {
                     <Table.HeadCell>Name</Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="divide-y">
-                    {freelancers.length > 0 ? (
-                      freelancers.map((freelancer) => (
+                    {freelancers.freelancersList?.length > 0 ? (
+                      freelancers.freelancersList.map((freelancer) => (
                         <Table.Row key={freelancer._id} className="bg-white ">
                           <Table.Cell>{freelancer.username}</Table.Cell>
                           <Table.Cell>
@@ -173,8 +175,8 @@ function FreelancerDashComponent() {
                     <Table.HeadCell>Status</Table.HeadCell>
                   </Table.Head>
                   <Table.Body className="divide-y">
-                    {videos.length > 0 ? (
-                      videos.map((video) => (
+                    {videos.videos?.length > 0 ? (
+                      videos.videos.map((video) => (
                         <Table.Row key={video._id} className="bg-white ">
                           <Table.Cell>{video.freelancerId.username}</Table.Cell>
                           <Table.Cell>

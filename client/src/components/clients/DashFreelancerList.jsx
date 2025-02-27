@@ -6,6 +6,8 @@ function DashFreelancerList() {
   const { currentUser } = useSelector((state) => state.user);
   const [freelancers, setFreelancers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [seeMore, setSeeMore] = useState(false);
+
   // console.log(freelacersList[0].populate(freelacersList[0].clientId));
   // console.log(freelacersList);
   useEffect(() => {
@@ -19,6 +21,11 @@ function DashFreelancerList() {
         // console.log(data.freelancersList);
         if (res.ok) {
           setFreelancers(data.freelancersList);
+          if (data.freelancersList.length < 9) {
+            setSeeMore(false);
+          } else {
+            setSeeMore(true);
+          }
         } else {
           console.log(error.message);
         }
@@ -30,6 +37,30 @@ function DashFreelancerList() {
     fetchFreelancerList();
   }, [currentUser?._id]);
 
+  const handleSeeMore = async () => {
+    const startIndex = freelancers.length;
+    try {
+      const res = await fetch(
+        `/server/video/get-freelancers-list/${currentUser?._id}?startIndex=${startIndex}`
+      );
+
+      const data = await res.json();
+      // console.log(data);
+      if (res.ok) {
+        setFreelancers([...freelancers, ...data.freelancersList]);
+        if (data.freelancersList.length < 9) {
+          setSeeMore(false);
+        } else {
+          setSeeMore(true);
+        }
+      } else {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   if (loading) {
     return (
       <p className="text-center">
@@ -38,7 +69,7 @@ function DashFreelancerList() {
     );
   }
   return (
-    <>
+    <div>
       <h1 className="text-center font-bold text-4xl">Freelancer's List</h1>
       <div className="overflow-x-auto shadow-md rounded-lg p-6 m-6 bg-white">
         <Table hoverable>
@@ -90,7 +121,15 @@ function DashFreelancerList() {
           </Table.Body>
         </Table>
       </div>
-    </>
+      {seeMore && (
+        <p
+          className="text-center text-green-500 cursor-pointer "
+          onClick={handleSeeMore}
+        >
+          See more
+        </p>
+      )}
+    </div>
   );
 }
 

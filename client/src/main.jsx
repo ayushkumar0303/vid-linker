@@ -36,10 +36,10 @@ createRoot(document.getElementById("root")).render(
 
             {/* <Route index element={<DashComponent />} /> */}
 
-            <Route path="reject/:videoId" element={<VideoReject />} />
-            <Route path="approve/:videoId" element={<VideoApprove />} />
+            <Route path="/reject/:videoId" element={<VideoReject />} />
+            <Route path="/approve/:videoId" element={<VideoApprove />} />
             <Route
-              path="upload/:videoId/:channelName"
+              path="/upload/:videoId/:channelName"
               element={<UploadVideo />}
             />
             {/* <Route path="/signin" element={<Signin />} />
