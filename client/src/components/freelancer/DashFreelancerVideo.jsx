@@ -1,12 +1,17 @@
-import { Spinner, Table } from "flowbite-react";
-import React, { useEffect, useState } from "react";
+import { Alert, Button, Spinner, Table } from "flowbite-react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import ButtonUpload from "../clients/ButtonUpload";
 
 function DashFreelancerVideo() {
   const { currentUser } = useSelector((state) => state.user);
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(false);
+
   const [seeMore, setSeeMore] = useState(true);
+
+  let vidId;
+  // const navigate()
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -71,11 +76,10 @@ function DashFreelancerVideo() {
         <Table hoverable>
           <Table.Head>
             <Table.HeadCell>Date</Table.HeadCell>
-            <Table.HeadCell>Time</Table.HeadCell>
             <Table.HeadCell>Video</Table.HeadCell>
             <Table.HeadCell>Client User ID</Table.HeadCell>
             <Table.HeadCell>Status</Table.HeadCell>
-            <Table.HeadCell>Reject Message</Table.HeadCell>
+            <Table.HeadCell>Information</Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
             {videos.length > 0 ? (
@@ -84,9 +88,7 @@ function DashFreelancerVideo() {
                   <Table.Cell className="p-3">
                     {new Date(video.createdAt).toLocaleDateString()}
                   </Table.Cell>
-                  <Table.Cell className="p-3">
-                    {new Date(video.createdAt).toLocaleTimeString()}
-                  </Table.Cell>
+
                   <Table.Cell className="p-3">
                     <video
                       controls
@@ -103,19 +105,43 @@ function DashFreelancerVideo() {
                   <Table.Cell className="p-3">
                     <span
                       className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                        video.videoStatus === "Approved"
-                          ? "bg-green-100 text-green-600"
+                        video.videoStatus === "Uploaded"
+                          ? "text-green-600 bg-green-100"
+                          : video.videoStatus === "Approved"
+                          ? "text-blue-600 bg-blue-100"
                           : video.videoStatus === "Pending"
-                          ? "bg-yellow-100 text-yellow-600"
-                          : "bg-red-100 text-red-600"
+                          ? "text-yellow-600 bg-yellow-100"
+                          : "text-red-600 bg-red-100"
                       }`}
                     >
                       {video.videoStatus}
                     </span>
                   </Table.Cell>
                   {video.videoStatus === "Rejected" && (
-                    <Table.Cell className="p-3 max-w-10">
-                      <span>{video.videoRejectMessage}</span>
+                    <Table.Cell className="p-3 max-w-10 min-w-7">
+                      <span className="italic">Reject message: </span>
+                      <span className="text-red-500">
+                        {video.videoRejectMessage}
+                      </span>
+                    </Table.Cell>
+                  )}
+                  {video.videoStatus === "Approved" && (
+                    <Table.Cell className="p-3 max-w-10 min-w-7">
+                      <span className="italic">Channel name:</span>
+                      <span className="text-blue-500">
+                        {video.youtubeChannelName}
+                      </span>
+                      <div className="flex gap-2 justify-center items-center">
+                        <ButtonUpload videoId={video._id} />
+                      </div>
+                    </Table.Cell>
+                  )}
+                  {video.videoStatus === "Uploaded" && (
+                    <Table.Cell className="p-3 max-w-10 min-w-7">
+                      <span className="italic">Uploaded to:</span>
+                      <span className="text-green-500">
+                        {video.youtubeChannelName}
+                      </span>
                     </Table.Cell>
                   )}
                 </Table.Row>

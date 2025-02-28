@@ -196,11 +196,13 @@ function ClientDashComponent() {
                           <Table.Cell className="p-3">
                             <span
                               className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                                video.videoStatus === "Approved"
-                                  ? "bg-green-100 text-green-600"
+                                video.videoStatus === "Uploaded"
+                                  ? "text-green-600 bg-green-100"
+                                  : video.videoStatus === "Approved"
+                                  ? "text-blue-600 bg-blue-100"
                                   : video.videoStatus === "Pending"
-                                  ? "bg-yellow-100 text-yellow-600"
-                                  : "bg-red-100 text-red-600"
+                                  ? "text-yellow-600 bg-yellow-100"
+                                  : "text-red-600 bg-red-100"
                               }`}
                             >
                               {video.videoStatus}

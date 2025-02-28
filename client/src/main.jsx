@@ -6,19 +6,12 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import ContactUs from "./pages/ContactUs.jsx";
 import About from "./pages/About.jsx";
 import Home from "./pages/Home.jsx";
-import Pricing from "./pages/Pricing.jsx";
 import store from "./store/store.js";
 import { Provider } from "react-redux";
 import Error404 from "./pages/Error404.jsx";
 import PrivateDash from "./components/PrivateDash.jsx";
-
 import VideoReject from "./components/clients/VideoReject.jsx";
-import UploadVideo from "./components/clients/UploadVideo.jsx";
 import AuthPage from "./pages/AuthPage.jsx";
-import FreelancerSignin from "./pages/FreelancerSignin.jsx";
-import ClientSignin from "./pages/ClientSignin.jsx";
-import ClientSignup from "./pages/ClientSignup.jsx";
-import FreelancerSignup from "./pages/FreelancerSignup.jsx";
 import VideoApprove from "./components/clients/VideoApprove.jsx";
 
 createRoot(document.getElementById("root")).render(
@@ -38,10 +31,7 @@ createRoot(document.getElementById("root")).render(
 
             <Route path="/reject/:videoId" element={<VideoReject />} />
             <Route path="/approve/:videoId" element={<VideoApprove />} />
-            <Route
-              path="/upload/:videoId/:channelName"
-              element={<UploadVideo />}
-            />
+
             {/* <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} /> */}
           </Route>

@@ -73,7 +73,6 @@ function DashReviewVideos() {
         <Table hoverable>
           <Table.Head>
             <Table.HeadCell>Date</Table.HeadCell>
-            <Table.HeadCell>Time</Table.HeadCell>
             <Table.HeadCell>Video</Table.HeadCell>
             <Table.HeadCell>Freelancer user id</Table.HeadCell>
 
@@ -91,9 +90,7 @@ function DashReviewVideos() {
                   <Table.Cell className="whitespace-nowrap font-medium text-gray-900 ">
                     {new Date(video.updatedAt).toLocaleDateString()}
                   </Table.Cell>
-                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 ">
-                    {new Date(video.updatedAt).toLocaleTimeString()}
-                  </Table.Cell>
+
                   <Table.Cell>
                     <video
                       controls
@@ -112,12 +109,16 @@ function DashReviewVideos() {
                   {/* Approve and Reject Links */}
                   <Table.Cell>
                     <Link to={`/approve/${video._id}`}>
-                      <Button gradientMonochrome="success">Approve</Button>
+                      <Button gradientMonochrome="info" size="xs">
+                        Approve
+                      </Button>
                     </Link>
                   </Table.Cell>
                   <Table.Cell>
                     <Link to={`/reject/${video._id}`}>
-                      <Button gradientMonochrome="failure">Reject</Button>
+                      <Button gradientMonochrome="failure" size="xs">
+                        Reject
+                      </Button>
                     </Link>
                   </Table.Cell>
                 </Table.Row>

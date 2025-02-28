@@ -5,6 +5,7 @@ import fs from "fs";
 import errorHandler from "../utils/error.js";
 import { pipeline } from "stream/promises";
 import jwt from "jsonwebtoken";
+import { error } from "console";
 
 export const youtubeConnect = async (req, res) => {
   // console.log("inside youtube connect");
@@ -42,15 +43,15 @@ export const youtubeCallback = async (req, res, next) => {
 
   // Exchange code for tokens
   const { tokens } = await oauth2Client.getToken(code);
-  const authToken = jwt.sign(tokens, process.env.JWT_SECRET, {
-    expiresIn: "10m",
-  });
-  // console.log(authToken);
-  // console.log(tokens);
+  const authToken = jwt.sign(tokens, process.env.JWT_SECRET);
+  // // console.log(authToken);
+  // // console.log(tokens);
 
-  res.cookie("auth_token", authToken, {
-    httpOnly: true,
-  });
+  // res.cookie("auth_token", authToken, {
+  //   httpOnly: true,
+  // });
+
+  // console.log(tokens);
 
   oauth2Client.setCredentials(tokens);
 
@@ -66,11 +67,31 @@ export const youtubeCallback = async (req, res, next) => {
 
     const channelName = response.data.items[0].snippet.customUrl;
 
+    if (!channelName) {
+      return next(errorHandler(404, "No youtube channel found"));
+    }
+
+    const video = await Video.findByIdAndUpdate(
+      state,
+      {
+        $set: {
+          youtubeAuthToken: authToken,
+          youtubeChannelName: channelName,
+          videoStatus: "Approved",
+        },
+      },
+      { new: true }
+    );
+
+    if (!video) {
+      return next(errorHandler(404, "Video not found"));
+    }
+
     // console.log(channelName);
     // res.redirect(`http://localhost:5173/dashboard`);
 
     // // const { password: _pass, ...rest } = user._doc;
-    res.redirect(`http://localhost:5173/upload/${state}/${channelName}`);
+    res.redirect(`http://localhost:5173/dashboard`);
   } catch (error) {
     // console.error(error);
     res.status(400).json({
@@ -83,41 +104,58 @@ export const youtubeCallback = async (req, res, next) => {
 export const youtubeUpload = async (req, res, next) => {
   // console.log("youtubeUplaod");
   const { videoId } = req.query;
-  const { id } = req.user;
-  // console.log(videoId);
-  // console.log(id);
+
   const tempFilePath = "./tempVideoForYoutube.mp4";
   if (req.user.id !== req.params.userId) {
     return next(errorHandler(401, "You are not allowed to upload this video"));
   }
 
-  const authToken = req.cookies.auth_token;
-  if (!authToken) {
-    return next(errorHandler(401, "You are not allowed to upload this video"));
-  }
-
-  jwt.verify(authToken, process.env.JWT_SECRET, (error, youtubeTokens) => {
-    if (error) {
-      return next(error);
-    }
-    req.youtubeTokens = youtubeTokens;
-  });
-
   // console.log(req);
-  oauth2Client.setCredentials(req.youtubeTokens);
-
-  // Get User’s YouTube Channel ID
-  const youtube = google.youtube({ version: "v3", auth: oauth2Client });
 
   try {
-    const videoToUpload = await Video.findOne({
-      _id: videoId,
-      clientId: id,
+    const videoToUpload = await Video.findById(videoId);
+
+    if (!videoToUpload) {
+      return next(errorHandler(401, "Video not found"));
+    }
+
+    const { videoTitle, videoDescription, videoUrl, youtubeAuthToken } =
+      videoToUpload;
+    // console.log(youtubeAuthToken);
+
+    if (
+      !videoTitle ||
+      !videoDescription ||
+      !videoUrl ||
+      videoTitle === "" ||
+      videoDescription === "" ||
+      videoUrl === ""
+    ) {
+      return next(errorHandler(404, "Missing parameters"));
+    }
+
+    if (!youtubeAuthToken || youtubeAuthToken === "") {
+      return next(
+        errorHandler(401, "you are not allowed to upload video in this channel")
+      );
+    }
+
+    jwt.verify(youtubeAuthToken, process.env.JWT_SECRET, (err, token) => {
+      if (err) {
+        return next(err);
+      }
+      req.token = token;
     });
 
-    const { videoTitle, videoDescription, videoUrl } = videoToUpload;
+    oauth2Client.setCredentials(req.token);
+
+    // Get User’s YouTube Channel ID
+    const youtube = google.youtube({ version: "v3", auth: oauth2Client });
+
     const resUrl = await fetch(videoUrl);
+
     if (!resUrl.ok) {
+      console.log(resUrl);
       return res.status(400).json({ message: "Failed to download file" });
     }
     const fileStream = fs.createWriteStream(tempFilePath);
@@ -151,12 +189,13 @@ export const youtubeUpload = async (req, res, next) => {
     // console.log(response.statusText);
 
     if (response.status === 200) {
-      videoToUpload.videoStatus = "Approved";
+      videoToUpload.videoStatus = "Uploaded";
+      videoToUpload.youtubeAuthToken = {};
       await videoToUpload.save();
     }
 
     // console.log("Upload response:", response.data);
-    return res.status(200).json(response.data);
+    return res.status(200).json({ message: "Video Uploaded Successfully" });
   } catch (error) {
     return next(error);
   }

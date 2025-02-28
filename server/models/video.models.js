@@ -18,17 +18,28 @@ const videoSchema = new mongoose.Schema(
     },
     videoStatus: {
       type: String,
-      enum: ["Pending", "Approved", "Rejected"],
+      enum: ["Pending", "Approved", "Rejected", "Uploaded"],
       default: "Pending",
     },
     videoTitle: {
       type: String,
+      default: "",
     },
     videoDescription: {
       type: String,
+      default: "",
     },
     videoRejectMessage: {
       type: String,
+      default: "",
+    },
+    youtubeAuthToken: {
+      type: Object,
+      default: {},
+    },
+    youtubeChannelName: {
+      type: String,
+      default: "",
     },
   },
   { timestamps: true }
