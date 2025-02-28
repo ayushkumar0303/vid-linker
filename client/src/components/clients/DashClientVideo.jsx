@@ -131,6 +131,14 @@ function DashClientVideo() {
                       </span>
                     </Table.Cell>
                   )}
+                  {video.videoStatus === "Uploaded" && (
+                    <Table.Cell className="p-3 max-w-10 min-w-7">
+                      <span className="italic">Uploaded to:</span>
+                      <span className="text-green-500">
+                        {video.youtubeChannelName}
+                      </span>
+                    </Table.Cell>
+                  )}
                 </Table.Row>
               ))
             ) : (
