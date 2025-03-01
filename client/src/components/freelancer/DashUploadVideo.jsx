@@ -215,7 +215,9 @@ function DashUploadVideo() {
               type="submit"
               gradientMonochrome="success"
               // outline
-              disabled={videoLoading || !selectedClient || videoUploadLoading}
+              disabled={
+                videoLoading || !selectedClient || videoUploadLoading || error
+              }
               className="w-full py-1 px-2 bg-teal-500 text-white rounded-lg "
             >
               {videoUploadLoading ? (

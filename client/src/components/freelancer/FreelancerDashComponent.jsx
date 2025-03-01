@@ -60,7 +60,7 @@ function ClientDashComponent() {
       <h1 className="text-center font-bold text-5xl pb-5">
         Freelancer's Dashboard
       </h1>
-      <div className="flex justify-around">
+      <div className="flex justify-around flex-wrap gap-6">
         <div className="flex flex-col min-w-52 p-4 gap-2 bg-white rounded-lg shadow-lg ">
           <div className="flex items-center gap-3 justify-between">
             <div>

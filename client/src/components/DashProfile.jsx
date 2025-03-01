@@ -106,9 +106,9 @@ function DashProfile() {
   // console.log(imageURL);
   // console.log(currentUser.profilePicture);
   return (
-    <div className="flex flex-grow flex-col items-center ">
+    <div className="flex flex-grow flex-col items-center m-2 ">
       {currentUser && (
-        <Card className="min-w-96">
+        <Card className="w-3/4 max-w-80 m-2 ">
           <h1 className="flex font-bold text-5xl justify-center pb-5">
             Profile
           </h1>
