@@ -55,12 +55,10 @@ function FreelancerDashComponent() {
     fetchFreelancerList();
   }, [currentUser?._id]);
   return (
-    <div className="flex flex-col">
-      <h1 className="text-center font-bold text-4xl p-3 pb-6">
-        Client's Dashboard
-      </h1>
+    <div className="flex flex-col gap-6">
+      <h1 className="text-center font-bold text-4xl">Client's Dashboard</h1>
       <div className="flex justify-around flex-wrap gap-6">
-        <div className="flex flex-col min-w-52 p-4 gap-2 bg-white rounded-lg shadow-lg ">
+        <div className="flex flex-col min-w-60 w-80 p-4 gap-2 bg-white rounded-lg shadow-lg ">
           <div className="flex items-center gap-3 justify-between">
             <div>
               <p className="uppercase text-gray-500">Total Freelancers</p>
@@ -74,7 +72,7 @@ function FreelancerDashComponent() {
           </div>
         </div>
 
-        <div className="flex flex-col min-w-52 p-4 gap-2 bg-white rounded-lg shadow-lg ">
+        <div className="flex flex-col min-w-60 w-80 p-4 gap-2 bg-white rounded-lg shadow-lg ">
           <div className="flex items-center gap-3 justify-between">
             <div>
               <p className="uppercase text-gray-500">Total Videos</p>
@@ -86,8 +84,8 @@ function FreelancerDashComponent() {
           </div>
         </div>
       </div>
-      <div className="flex justify-around flex-wrap items-start">
-        <div className="bg-white shadow-md rounded-lg p-6 m-6 min-w-96">
+      <div className="flex justify-around flex-wrap items-start gap-6">
+        <div className="bg-white shadow-md rounded-lg p-6 min-w-96">
           {freelancersLoading ? (
             <p className="text-center">
               <Spinner color="success" aria-label="Success spinner example" />
@@ -147,7 +145,7 @@ function FreelancerDashComponent() {
         </div>
 
         {/* Videos Section */}
-        <div className="bg-white shadow-md rounded-lg p-6 m-6 min-w-96">
+        <div className="bg-white shadow-md rounded-lg p-6 min-w-96">
           {videosLoading ? (
             <p className="text-center">
               <Spinner color="success" aria-label="Success spinner example" />
