@@ -155,7 +155,7 @@ export const youtubeUpload = async (req, res, next) => {
     const resUrl = await fetch(videoUrl);
 
     if (!resUrl.ok) {
-      console.log(resUrl);
+      // console.log(resUrl);
       return res.status(400).json({ message: "Failed to download file" });
     }
     const fileStream = fs.createWriteStream(tempFilePath);

@@ -43,11 +43,11 @@ function FreelancerSignin() {
 
       const data = await res.json();
       if (res.ok) {
-        console.log("this is respons");
+        // console.log("this is respons");
         dispatch(signInSuccess(data));
         navigate("/");
       } else {
-        console.log("this us data");
+        // console.log("this us data");
         dispatch(signInFailure(data.message));
       }
     } catch (error) {

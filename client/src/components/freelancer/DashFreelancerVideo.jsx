@@ -19,7 +19,7 @@ function DashFreelancerVideo() {
         setLoading(true);
         const res = await fetch(`/server/video/get-videos/${currentUser?._id}`);
         const data = await res.json();
-        console.log(data);
+        // console.log(data);
         if (res.ok) {
           setVideos(data.videos);
           if (data.videos.length < 5) {

@@ -31,8 +31,8 @@ export const getUser = async (req, res, next) => {
 };
 export const updateUser = async (req, res, next) => {
   let { username, email, password, newPassword } = req.body;
-  console.log(password);
-  console.log(newPassword);
+  // console.log(password);
+  // console.log(newPassword);
   if (!password || password === "") {
     return next(errorHandler(404, "Password is required for the update user"));
   }
