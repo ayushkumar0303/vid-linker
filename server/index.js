@@ -14,6 +14,8 @@ app.use(express.json());
 dotenv.config();
 app.use(cookieParser());
 
+const port = process.env.PORT || 3000;
+
 const __dirname = path.resolve();
 
 mongoose
@@ -27,8 +29,8 @@ mongoose
 
 app.use(express.static(path.join(__dirname, "/client/dist")));
 
-app.listen(3000, (req, res) => {
-  console.log("server is running on port number 3000");
+app.listen(port, (req, res) => {
+  console.log(`server is running on port number ${port}`);
 });
 
 app.use("/server/user", userRouter);
