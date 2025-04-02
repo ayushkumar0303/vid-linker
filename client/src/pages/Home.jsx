@@ -97,9 +97,7 @@ function Home() {
 
       {/* Start Using */}
       <section className="py-16 text-center">
-        <h2 className="text-3xl font-semibold">{` 🚀 Start Using It ${
-          currentUser ? currentUser.name.split(" ")[0] : "Today"
-        }!`}</h2>
+        <h2 className="text-3xl font-semibold"> 🚀 Start Using It Today! </h2>
         <div className="flex justify-center">
           {!currentUser && (
             <Link to="/auth">
