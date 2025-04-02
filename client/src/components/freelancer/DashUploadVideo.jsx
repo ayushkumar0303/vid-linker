@@ -61,6 +61,7 @@ function DashUploadVideo() {
     const delayDebounce = setTimeout(async () => {
       if (searchQuery.length === 0) {
         setClientsSuggestions([]);
+        setClientFound(true);
         return;
       }
       try {
