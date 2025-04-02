@@ -100,7 +100,7 @@ function ContactUs() {
           <div className="mt-6 space-y-4">
             <div className="flex items-center justify-center gap-3">
               <HiMail className="text-green-500 text-2xl" />
-              <p className="text-gray-600">sams231334@gmail.com</p>
+              <p className="text-gray-600">ayushk8295@gmail.com</p>
             </div>
             <div className="flex items-center justify-center gap-3">
               <HiPhone className="text-green-500 text-2xl" />

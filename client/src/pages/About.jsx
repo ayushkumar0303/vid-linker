@@ -54,7 +54,7 @@ function About() {
         <h2 className="text-3xl font-semibold">👨‍💻 Meet Our Team</h2>
         <div className="gap-6 mt-8 flex flex-col md:flex-row justify-center items-center ">
           <Card className="flex flex-col items-center min-w-[200px]">
-            <Avatar size="lg" img="https://i.pravatar.cc/100?img=12" />
+            <Avatar size="lg" img="ayush.jpg" />
             <h3 className="text-lg font-bold mt-4">Ayush</h3>
             <p className="text-gray-500">Founder & Developer</p>
           </Card>
@@ -62,6 +62,11 @@ function About() {
             <Avatar size="lg" img="https://i.pravatar.cc/100?img=12" />
             <h3 className="text-lg font-bold mt-4">Anuj</h3>
             <p className="text-gray-500">UI/UX Designer</p>
+          </Card>
+          <Card className="flex flex-col items-center min-w-[200px]">
+            <Avatar size="lg" img="harshit.jpeg" />
+            <h3 className="text-lg font-bold mt-4">Harshit</h3>
+            <p className="text-gray-500">App Tester</p>
           </Card>
         </div>
       </section>

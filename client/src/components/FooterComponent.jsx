@@ -40,7 +40,7 @@ function FooterComponent() {
 
         {/* Copyright Section */}
         <Footer.Copyright
-          by="Vid-Linker™ Developed by Ayush Kumar"
+          by="Vid-Linker™ All Rights Reserved"
           year={new Date().getFullYear()}
           className="text-gray-600"
         />
