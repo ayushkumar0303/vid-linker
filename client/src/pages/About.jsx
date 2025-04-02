@@ -56,7 +56,7 @@ function About() {
           <Card className="flex flex-col items-center min-w-[200px]">
             <Avatar size="lg" img="ayush.jpg" />
             <h3 className="text-lg font-bold mt-4">Ayush</h3>
-            <p className="text-gray-500">Founder & Developer</p>
+            <p className="text-gray-500">Developer</p>
           </Card>
           <Card className="flex flex-col items-center min-w-[200px]">
             <Avatar size="lg" img="https://i.pravatar.cc/100?img=12" />
