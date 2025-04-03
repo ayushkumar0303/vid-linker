@@ -54,7 +54,11 @@ function About() {
         <h2 className="text-3xl font-semibold">👨‍💻 Meet Our Team</h2>
         <div className="gap-6 mt-8 flex flex-col md:flex-row justify-center items-center ">
           <Card className="flex flex-col items-center min-w-[200px]">
-            <Avatar size="lg" img="ayush.jpg" />
+            <Avatar
+              size="lg"
+              img="ayush.jpg
+            "
+            />
             <h3 className="text-lg font-bold mt-4">Ayush</h3>
             <p className="text-gray-500">Developer</p>
           </Card>

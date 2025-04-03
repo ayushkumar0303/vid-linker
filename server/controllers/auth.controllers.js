@@ -60,7 +60,7 @@ export const clientSignin = async (req, res, next) => {
     const validUser = await User.findOne({ email });
 
     if (!validUser || validUser.role === "freelancer") {
-      return next(errorHandler(404, "User not found"));
+      return next(errorHandler(404, "You are a freelancer not client"));
     }
 
     const validPassword = bcryptjs.compareSync(password, validUser.password);
@@ -96,7 +96,7 @@ export const googleClient = async (req, res, next) => {
 
     if (user) {
       if (user.role === "freelancer") {
-        return next(errorHandler(404, "User not found"));
+        return next(errorHandler(404, "You are a freelancer not client"));
       }
       const token = jwt.sign(
         {
@@ -212,7 +212,7 @@ export const freelancerSignin = async (req, res, next) => {
   try {
     const validUser = await User.findOne({ email });
     if (!validUser || validUser.role === "client") {
-      return next(errorHandler(404, "User not found"));
+      return next(errorHandler(404, "You are a client not freelancer"));
     }
 
     const validPassword = bcryptjs.compareSync(password, validUser.password);
@@ -247,7 +247,7 @@ export const googleFreelancer = async (req, res, next) => {
     const user = await User.findOne({ email });
     if (user) {
       if (user.role === "client") {
-        return next(errorHandler(404, "User not found"));
+        return next(errorHandler(404, "You are a client not freelancer"));
       }
       const token = jwt.sign(
         {
