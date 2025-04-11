@@ -91,7 +91,7 @@ export const youtubeCallback = async (req, res, next) => {
     // res.redirect(`http://localhost:5173/dashboard`);
 
     // // const { password: _pass, ...rest } = user._doc;
-    res.redirect(`https://vid-linker.vercel.app/dashboard`);
+    res.redirect(`https://vid-linker.onrender.com/dashboard`);
   } catch (error) {
     // console.error(error);
     res.status(400).json({
