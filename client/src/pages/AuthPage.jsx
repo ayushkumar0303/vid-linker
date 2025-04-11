@@ -5,7 +5,7 @@ import FreelancerSignin from "./FreelancerSignin";
 import { Link, Outlet, useLocation } from "react-router";
 import FreelancerSignup from "./FreelancerSignup";
 import ClientSignup from "./ClientSignup";
-import { signInFailure } from "../store/store";
+import { clearError } from "../store/store";
 import { useDispatch } from "react-redux";
 import { SiLinkfire } from "react-icons/si";
 
@@ -18,7 +18,7 @@ function AuthPage() {
     const paramTab = paramsUrl.get("tab");
     // console.log(tab);
     setTab(paramTab);
-    dispatch(signInFailure(null));
+    dispatch(clearError(null));
   }, [path.search]);
 
   return (

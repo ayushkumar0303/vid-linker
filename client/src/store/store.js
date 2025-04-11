@@ -82,6 +82,9 @@ export const userSlice = createSlice({
       state.error = null;
       state.loading = true;
     },
+    clearError: (state) => {
+      state.error = null;
+    },
   },
 });
 
@@ -102,6 +105,7 @@ export const {
   fetchStart,
   fetchFailure,
   fetchSuccess,
+  clearError,
 } = userSlice.actions;
 
 const rootReducer = combineReducers({
